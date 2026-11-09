@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms of Service — Sketch Dev Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<style>
+  /* ===== VARIABEL WARNA ===== */
+  :root {
+    --bg-outer: #b8b8b8;
+    --bg-outer-stripe: #b0b0b0;
+    --paper: #ffffff;
+    --paper-line: #c8c8c8;
+    --paper-margin: #9a9a9a;
+    --paper-hole: #8a8a8a;
+    --paper-hole-ring: #c0c0c0;
+    --text: #1a1a1a;
+    --text-soft: #555555;
+    --text-faint: #666666;
+    --line: #1a1a1a;
+    --note-bg: #f0f0f0;
+    --note-border: #1a1a1a;
+    --highlight: #d8d8d8;
+    --shadow-1: rgba(0,0,0,0.2);
+    --shadow-2: rgba(0,0,0,0.25);
+    --shadow-3: rgba(0,0,0,0.15);
+    --btn-bg: #1a1a1a;
+    --btn-text: #ffffff;
+    --btn-shadow: rgba(0,0,0,0.35);
+  }
+
+  body.dark {
+    --bg-outer: #2a2a2a;
+    --bg-outer-stripe: #232323;
+    --paper: #1a1a1a;
+    --paper-line: #333333;
+    --paper-margin: #555555;
+    --paper-hole: #444444;
+    --paper-hole-ring: #2a2a2a;
+    --text: #e8e8e8;
+    --text-soft: #aaaaaa;
+    --text-faint: #888888;
+    --line: #e8e8e8;
+    --note-bg: #252525;
+    --note-border: #e8e8e8;
+    --highlight: #3a3a3a;
+    --shadow-1: rgba(0,0,0,0.5);
+    --shadow-2: rgba(0,0,0,0.6);
+    --shadow-3: rgba(0,0,0,0.4);
+    --btn-bg: #e8e8e8;
+    --btn-text: #1a1a1a;
+    --btn-shadow: rgba(0,0,0,0.6);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', 'Segoe UI', Arial, sans-serif;
+    background: var(--bg-outer);
+    background-image:
+      repeating-linear-gradient(45deg,
+        var(--bg-outer-stripe) 0px,
+        var(--bg-outer-stripe) 2px,
+        var(--bg-outer) 2px,
+        var(--bg-outer) 6px);
+    padding: 50px 20px 100px;
+    color: var(--text);
+    line-height: 1.9;
+    min-height: 100vh;
+    transition: background 0.4s ease, color 0.4s ease;
+  }
+
+  /* ===== KONTROL ===== */
+  .controls {
+    position: fixed;
+    top: 20px; right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 100;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .control-btn {
+    font-family: 'Nunito', 'Segoe UI', Arial, sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 8px 16px;
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    border: 2px solid var(--btn-bg);
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 2px 3px 0 var(--btn-shadow);
+    transition: transform 0.15s, background 0.3s, color 0.3s;
+  }
+
+  .control-btn:hover { transform: translateY(-2px); }
+  .control-btn:active {
+    transform: translateY(0);
+    box-shadow: 1px 1px 0 var(--btn-shadow);
+  }
+
+  /* ===== KERTAS ===== */
+  .paper {
+    max-width: 850px;
+    margin: 0 auto;
+    background: var(--paper);
+    background-image:
+      repeating-linear-gradient(to bottom,
+        transparent 0px,
+        transparent 31px,
+        var(--paper-line) 31px,
+        var(--paper-line) 32px);
+    padding: 70px 70px 70px 95px;
+    position: relative;
+    box-shadow:
+      0 2px 4px var(--shadow-1),
+      0 10px 25px var(--shadow-2),
+      0 25px 50px var(--shadow-3);
+    border-radius: 2px;
+    transform: rotate(-0.2deg);
+    transition: background 0.4s ease;
+  }
+
+  .paper::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; left: 65px;
+    width: 2px;
+    background: var(--paper-margin);
+    opacity: 0.7;
+  }
+
+  .paper::after {
+    content: '';
+    position: absolute;
+    left: 25px; top: 0; bottom: 0;
+    width: 20px;
+    background-image:
+      radial-gradient(circle, var(--paper-hole) 7px, var(--paper-hole-ring) 8px, transparent 9px),
+      radial-gradient(circle, var(--paper-hole) 7px, var(--paper-hole-ring) 8px, transparent 9px),
+      radial-gradient(circle, var(--paper-hole) 7px, var(--paper-hole-ring) 8px, transparent 9px);
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: center 15%, center 50%, center 85%;
+  }
+
+  /* ===== JUDUL ===== */
+  h1 {
+    font-family: 'Caveat', cursive;
+    font-size: 3.4rem;
+    font-weight: 700;
+    color: var(--text);
+    text-align: center;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+    display: block;
+    width: 100%;
+  }
+
+  h1::after {
+    content: '';
+    display: block;
+    width: 240px;
+    height: 2px;
+    background: var(--line);
+    margin: 12px auto 0;
+    transform: rotate(-0.6deg);
+    opacity: 0.85;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 1.35rem;
+    color: var(--text-soft);
+    margin-bottom: 50px;
+    font-style: italic;
+  }
+
+  /* ===== PEMISAH ===== */
+  .sketch-divider {
+    height: 18px;
+    margin: 40px 0;
+    position: relative;
+  }
+
+  .sketch-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 0; right: 0;
+    height: 1.5px;
+    background: var(--line);
+    opacity: 0.65;
+    transform: rotate(0.3deg);
+  }
+
+  .sketch-divider::after {
+    content: '';
+    position: absolute;
+    top: calc(50% - 3px); left: 3%; right: 3%;
+    height: 1px;
+    background: var(--line);
+    opacity: 0.4;
+    transform: rotate(-0.5deg);
+  }
+
+  h2 {
+    font-family: 'Nunito', 'Segoe UI', Arial, sans-serif;
+    font-weight: 800;
+    font-size: 2.1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 38px 0 14px;
+    position: relative;
+    padding-left: 30px;
+    display: block;
+  }
+
+  h2::before {
+    content: '✏';
+    position: absolute;
+    left: 0; top: 2px;
+    font-size: 1.3rem;
+    opacity: 0.85;
+  }
+
+  h2::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 1.5px;
+    background: var(--line);
+    margin-top: 6px;
+    opacity: 0.55;
+    transform: rotate(0.2deg);
+  }
+
+  p {
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+    color: var(--text);
+    text-align: justify;
+  }
+
+  ul, ol {
+    margin: 12px 0 22px 35px;
+    font-size: 1.2rem;
+  }
+
+  li { margin-bottom: 9px; color: var(--text); }
+  ul li::marker { color: var(--text); }
+
+  .note {
+    background: var(--note-bg);
+    border: 2px dashed var(--note-border);
+    border-radius: 6px;
+    padding: 22px 28px;
+    margin: 28px 0;
+    position: relative;
+    transform: rotate(-0.4deg);
+    box-shadow: 2px 3px 0 var(--shadow-1);
+  }
+
+  .note::before {
+    content: '📌';
+    position: absolute;
+    top: -16px; left: 22px;
+    font-size: 1.5rem;
+    transform: rotate(-15deg);
+    filter: grayscale(100%);
+  }
+
+  .note strong {
+    font-size: 1.25rem;
+    display: block;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+
+  .highlight {
+    background: var(--highlight);
+    padding: 1px 5px;
+    font-weight: 700;
+    border-radius: 2px;
+    color: var(--text);
+  }
+
+  .footer {
+    margin-top: 55px;
+    padding-top: 28px;
+    border-top: 2px dashed var(--line);
+    text-align: center;
+    font-size: 1.15rem;
+    color: var(--text-soft);
+  }
+
+
+  .footer-links {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 22px;
+    font-size: 1.1rem;
+  }
+
+  .footer-links a {
+    color: var(--text-soft);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--text-soft);
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover {
+    color: var(--text);
+  }
+  .social-links {
+    margin-top: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .social-links a {
+    color: var(--text-soft);
+    text-decoration: none;
+    border: 1.5px dashed var(--line);
+    border-radius: 999px;
+    padding: 4px 18px;
+    font-size: 1.05rem;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .social-links a:hover {
+    color: var(--text);
+    border-style: solid;
+  }
+
+
+  .signature {
+    font-family: 'Caveat', cursive;
+    font-size: 1.8rem;
+    color: var(--text);
+    margin-top: 22px;
+    transform: rotate(-2deg);
+    display: inline-block;
+  }
+
+  .back-top {
+    position: fixed;
+    bottom: 30px; right: 30px;
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    border: 2px solid var(--btn-bg);
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    font-size: 1.6rem;
+    cursor: pointer;
+    box-shadow: 3px 4px 0 var(--btn-shadow);
+    transition: transform 0.2s, background 0.3s, color 0.3s;
+    font-family: 'Nunito', 'Segoe UI', Arial, sans-serif;
+    font-weight: 700;
+    z-index: 100;
+  }
+
+  .back-top:hover {
+    transform: translateY(-3px) rotate(-5deg);
+    background: var(--paper);
+    color: var(--text);
+  }
+
+  .lang-section { display: none; }
+  .lang-section.active { display: block; }
+
+  @media (max-width: 600px) {
+    .paper { padding: 40px 25px 50px 60px; transform: none; }
+    .paper::before { left: 40px; }
+    .paper::after { left: 12px; }
+    h1 { font-size: 2.3rem; }
+    h2 { font-size: 1.65rem; padding-left: 25px; }
+    h2::before { font-size: 1.05rem; }
+    p, li { font-size: 1.08rem; }
+    body { padding: 15px 10px 90px; }
+    .controls { top: 10px; right: 10px; gap: 6px; }
+    .control-btn { font-size: 0.95rem; padding: 6px 10px; }
+  }
+
+  @keyframes writeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .paper > * { animation: writeIn 0.6s ease-out both; }
+</style>
+</head>
+<body>
+
+<div class="controls">
+  <button class="control-btn" id="langBtn" onclick="toggleLang()">🇮🇩 Indonesia</button>
+  <button class="control-btn" id="modeBtn" onclick="toggleMode()">🌙 Gelap</button>
+</div>
+
+<div class="paper">
+
+  <!-- ============================================
+       BAHASA INDONESIA
+       ============================================ -->
+  <div class="lang-section" id="lang-id">
+
+    <h1>Syarat & Ketentuan</h1>
+    <p class="subtitle">Sketch Dev Studio — "Dari goresan, jadi game."</p>
+
+    <div class="note">
+      <strong>📅 Terakhir Diperbarui:</strong> 28 Oktober 2026<br>
+      <strong>📌 Berlaku Sejak:</strong> 20 September 2026
+    </div>
+
+    <p>
+      Selamat datang di <span class="highlight">Sketch Dev Studio</span>.
+      Syarat & Ketentuan ini mengatur penggunaan Anda terhadap
+      aplikasi, game, dan layanan kami yang tersedia di
+      <strong>Google Play Store</strong>. Dengan mengunduh,
+      menginstal, atau menggunakan game kami, Anda menyetujui
+      syarat dan ketentuan ini.
+    </p>
+
+    <div class="sketch-divider"></div>
+
+    <h2>1. Penerimaan Syarat</h2>
+    <p>
+      Dengan mengakses atau menggunakan layanan kami, Anda
+      menyatakan bahwa Anda telah membaca, memahami, dan
+      menyetujui untuk terikat dengan Syarat & Ketentuan ini.
+      Jika Anda tidak setuju, mohon untuk tidak menggunakan
+      layanan kami.
+    </p>
+
+    <div class="sketch-divider"></div>
+
+    <h2>2. Kelayakan Pengguna</h2>
+    <ul>
+      <li>Anda harus berusia minimal <strong>13 tahun</strong> untuk menggunakan layanan kami.</li>
+      <li>Jika Anda di bawah 18 tahun, Anda memerlukan izin orang tua atau wali.</li>
+      <li>Anda bertanggung jawab atas keakuratan informasi yang Anda berikan.</li>
+    </ul>
+
+    <div class="sketch-divider"></div>
+
+    <h2>3. Lisensi Penggunaan</h2>
+    <p>
+      Kami memberikan Anda lisensi terbatas, tidak eksklusif,
+      tidak dapat dipindahtangankan, dan dapat dicabut untuk
+      menggunakan game kami untuk keperluan pribadi dan
+      non-komersial.
+    </p>
+    <p><strong>Anda TIDAK diperbolehkan untuk:</strong></p>
+    <ul>
+      <li>Menyalin, memodifikasi, atau mendistribusikan game kami.</li>
+      <li>Membalikkan rekayasa (reverse engineering) game kami.</li>
+      <li>Menggunakan game kami untuk tujuan ilegal.</li>
+      <li>Menjual, menyewakan, atau menyublisensikan game kami.</li>
+      <li>Menghapus atau mengubah hak cipta dan merek dagang kami.</li>
+    </ul>
+
+    <div class="sketch-divider"></div>
+
+    <h2>4. Pembelian Dalam Aplikasi</h2>
+    <p>
+      Game kami dapat menyediakan pembelian dalam aplikasi (in-app
+      purchase). Semua transaksi diproses oleh <strong>Google Play</strong>
+      dan tunduk pada kebijakan Google Play.
+    </p>
+    <ul>
+      <li>Semua pembelian bersifat <strong>final</strong> dan tidak dapat dikembalikan, kecuali diwajibkan oleh hukum.</li>
+      <li>Harga dapat berubah sewaktu-waktu tanpa pemberitahuan.</li>
+      <li>Kami tidak bertanggung jawab atas masalah pembayaran yang disebabkan oleh Google Play.</li>
+    </ul>
+
+    <div class="note">
+      <strong>💡 Catatan:</strong>
+      Untuk permintaan pengembalian dana, silakan hubungi
+      Google Play Support terlebih dahulu sesuai kebijakan mereka.
+    </div>
+
+    <div class="sketch-divider"></div>
+
+    <h2>5. Iklan</h2>
+    <p>
+      Game kami dapat menampilkan iklan dari pihak ketiga
+      (seperti AdMob). Dengan menggunakan game kami, Anda
+      menyetujui penayangan iklan tersebut. Kami tidak
+      bertanggung jawab atas konten iklan pihak ketiga.
+    </p>
+
+    <div class="sketch-divider"></div>
+
+    <h2>6. Hak Kekayaan Intelektual</h2>
+    <p>
+      Semua konten dalam game kami — termasuk namun tidak
+      terbatas pada grafik, suara, musik, kode, teks, dan
+      desain — adalah milik <strong>Sketch Dev Studio</strong>
+      dan dilindungi oleh hukum hak cipta.
+    </p>
+    <p>
+      Anda tidak diperbolehkan menggunakan aset kami tanpa
+      izin tertulis dari kami.
+    </p>
+
+    <div class="sketch-divider"></div>
+
+    <h2>7. Perilaku Pengguna</h2>
+    <p>Anda setuju untuk tidak:</p>
+    <ul>
+      <li>Menggunakan cheat, bot, atau modifikasi tidak sah.</li>
+      <li>Mengganggu pengalaman pengguna lain.</li>
+      <li>Mengirim konten yang melanggar hukum, kasar, atau menyinggung.</li>
+      <li>Mencoba mengakses sistem kami tanpa izin.</li>
+    </ul>
+    <p>
+      Pelanggaran dapat mengakibatkan <strong>pemblokiran akun</strong>
+      atau <strong>pencabutan akses</strong> tanpa pemberitahuan.
+    </p>
+
+    <div class="sketch-divider"></div>
+
+    <h2>8. Penafian Jaminan</h2>
+    <p>
+      Game kami disediakan <strong>"sebagaimana adanya"</strong>
+      tanpa jaminan apa pun, baik tersurat maupun tersirat.
+      Kami tidak menjamin bahwa game akan bebas dari kesalahan,
+      bug, atau gangguan.
+    </p>
+
+    <div class="sketch-divider"></div>
+
+    <h2>9. Batasan Tanggung Jawab</h2>
+    <p>
+      Sejauh diizinkan oleh hukum, <strong>Sketch Dev Studio</strong>
+      tidak bertanggung jawab atas kerugian tidak langsung,
+      insidental, atau konsekuensial yang timbul dari
+      penggunaan game kami.
+    </p>
+
+    <div class="sketch-divider"></div>
+
+    <h2>10. Perubahan Layanan</h2>
+    <p>
+      Kami berhak untuk mengubah, menangguhkan, atau
+      menghentikan layanan kami (seluruhnya atau sebagian)
+      kapan saja tanpa pemberitahuan sebelumnya.
+    </p>
+
+    <div class="sketch-divider"></div>
+
+    <h2>11. Perubahan Syarat</h2>
+    <p>
+      Kami dapat memperbarui Syarat & Ketentuan ini dari waktu
+      ke waktu. Perubahan akan diumumkan melalui aplikasi atau
+      halaman ini. Penggunaan berkelanjutan berarti Anda
+      menyetujui syarat yang diperbarui.
+    </p>
+
+    <div class="sketch-divider"></div>
+
+    <h2>12. Hukum yang Berlaku</h2>
+    <p>
+      Syarat & Ketentuan ini diatur oleh hukum yang berlaku
+      di <strong>Republik Indonesia</strong>. Setiap sengketa
+      akan diselesaikan melalui musyawarah terlebih dahulu.
+    </p>
+
+    <div class="sketch-divider"></div>
+
+    <h2>13. Hubungi Kami</h2>
+    <p>Jika Anda memiliki pertanyaan tentang Syarat & Ketentuan ini:</p>
+    <ul>
+      <li>📧 Email: <span class="highlight">support@sketchdev.my.id</span></li>
+      <li>🌐 Website: <span class="highlight">sketchdev.my.id</span></li>
+      <li>📍 Alamat: Indonesia</li>
+    </ul>
+
+    <div class="footer">
+      <p>Terima kasih telah menggunakan layanan kami</p>
+      <p class="signature">✏ Sketch Dev Studio</p>
+      <p style="margin-top:12px; font-size:1.05rem; color:var(--text-faint);">"Dari goresan, jadi game."</p>
+    
+      <div class="footer-links">
+        <a href="./">Beranda</a>
+        <a href="privacy">Kebijakan Privasi</a>
+        <a href="terms">Syarat & Ketentuan</a>
+        <a href="contact">Kontak</a>
+      </div>
+      <div class="social-links">
+        <a href="https://www.tiktok.com/@sketch.dev.studio" target="_blank" rel="noopener">TikTok</a>
+        <a href="https://www.instagram.com/sketch.dev.studio" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.youtube.com/@sketchdevstudio" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://play.google.com/store/apps/developer?id=Sketch+Dev+Studio" target="_blank" rel="noopener">Google Play</a>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ============================================
+       BAHASA INGGRIS
+       ============================================ -->
+  <div class="lang-section active" id="lang-en">
+
+    <h1>Terms & Conditions</h1>
+    <p class="subtitle">Sketch Dev Studio — "From sketch, to game."</p>
+
+    <div class="note">
+      <strong>📅 Last Updated:</strong> October 28, 2026<br>
+      <strong>📌 Effective Since:</strong> September 20, 2026
+    </div>
+
+    <p>
+      Welcome to <span class="highlight">Sketch Dev Studio</span>.
+      These Terms & Conditions govern your use of our applications,
+      games, and services available on the <strong>Google Play Store</strong>.
+      By downloading, installing, or using our games, you agree to
+      these terms and conditions.
+    </p>
+
+    <div class="sketch-divider"></div>
+
+    <h2>1. Acceptance of Terms</h2>
+    <p>
+      By accessing or using our services, you acknowledge that you
+      have read, understood, and agree to be bound by these Terms
+      & Conditions. If you do not agree, please do not use our
+      services.
+    </p>
+
+    <div class="sketch-divider"></div>
+
+    <h2>2. User Eligibility</h2>
+    <ul>
+      <li>You must be at least <strong>13 years old</strong> to use our services.</li>
+      <li>If you are under 18, you need parental or guardian consent.</li>
+      <li>You are responsible for the accuracy of information you provide.</li>
+    </ul>
+
+    <div class="sketch-divider"></div>
+
+    <h2>3. License to Use</h2>
+    <p>
+      We grant you a limited, non-exclusive, non-transferable, and
+      revocable license to use our games for personal and
+      non-commercial purposes.
+    </p>
+    <p><strong>You are NOT allowed to:</strong></p>
+    <ul>
+      <li>Copy, modify, or distribute our games.</li>
+      <li>Reverse engineer our games.</li>
+      <li>Use our games for illegal purposes.</li>
+      <li>Sell, rent, or sublicense our games.</li>
+      <li>Remove or alter our copyright and trademarks.</li>
+    </ul>
+
+    <div class="sketch-divider"></div>
+
+    <h2>4. In-App Purchases</h2>
+    <p>
+      Our games may offer in-app purchases. All transactions are
+      processed by <strong>Google Play</strong> and subject to Google
+      Play policies.
+    </p>
+    <ul>
+      <li>All purchases are <strong>final</strong> and non-refundable, unless required by law.</li>
+      <li>Prices may change at any time without notice.</li>
+      <li>We are not responsible for payment issues caused by Google Play.</li>
+    </ul>
+
+    <div class="note">
+      <strong>💡 Note:</strong>
+      For refund requests, please contact Google Play Support first
+      according to their policy.
+    </div>
+
+    <div class="sketch-divider"></div>
+
+    <h2>5. Advertising</h2>
+    <p>
+      Our games may display advertisements from third parties
+      (such as AdMob). By using our games, you consent to the
+      display of such ads. We are not responsible for the content
+      of third-party ads.
+    </p>
+
+    <div class="sketch-divider"></div>
+
+    <h2>6. Intellectual Property Rights</h2>
+    <p>
+      All content in our games — including but not limited to
+      graphics, sound, music, code, text, and design — is owned
+      by <strong>Sketch Dev Studio</strong> and protected by
+      copyright law.
+    </p>
+    <p>
+      You may not use our assets without written permission
+      from us.
+    </p>
+
+    <div class="sketch-divider"></div>
+
+    <h2>7. User Conduct</h2>
+    <p>You agree not to:</p>
+    <ul>
+      <li>Use cheats, bots, or unauthorized modifications.</li>
+      <li>Disrupt other users' experience.</li>
+      <li>Send illegal, rude, or offensive content.</li>
+      <li>Attempt to access our systems without authorization.</li>
+    </ul>
+    <p>
+      Violations may result in <strong>account blocking</strong>
+      or <strong>access revocation</strong> without notice.
+    </p>
+
+    <div class="sketch-divider"></div>
+
+    <h2>8. Disclaimer of Warranties</h2>
+    <p>
+      Our games are provided <strong>"as is"</strong> without any
+      warranty, express or implied. We do not guarantee that games
+      will be free from errors, bugs, or interruptions.
+    </p>
+
+    <div class="sketch-divider"></div>
+
+    <h2>9. Limitation of Liability</h2>
+    <p>
+      To the extent permitted by law, <strong>Sketch Dev Studio</strong>
+      is not liable for indirect, incidental, or consequential damages
+      arising from the use of our games.
+    </p>
+
+    <div class="sketch-divider"></div>
+
+    <h2>10. Service Changes</h2>
+    <p>
+      We reserve the right to modify, suspend, or discontinue our
+      services (in whole or in part) at any time without prior notice.
+    </p>
+
+    <div class="sketch-divider"></div>
+
+    <h2>11. Changes to Terms</h2>
+    <p>
+      We may update these Terms & Conditions from time to time.
+      Changes will be announced through the app or this page.
+      Continued use means you agree to the updated terms.
+    </p>
+
+    <div class="sketch-divider"></div>
+
+    <h2>12. Governing Law</h2>
+    <p>
+      These Terms & Conditions are governed by the laws applicable
+      in the <strong>Republic of Indonesia</strong>. Any dispute
+      will be resolved through deliberation first.
+    </p>
+
+    <div class="sketch-divider"></div>
+
+    <h2>13. Contact Us</h2>
+    <p>If you have questions about these Terms & Conditions:</p>
+    <ul>
+      <li>📧 Email: <span class="highlight">support@sketchdev.my.id</span></li>
+      <li>🌐 Website: <span class="highlight">sketchdev.my.id</span></li>
+      <li>📍 Address: Indonesia</li>
+    </ul>
+
+    <div class="footer">
+      <p>Thank you for using our services</p>
+      <p class="signature">✏ Sketch Dev Studio</p>
+      <p style="margin-top:12px; font-size:1.05rem; color:var(--text-faint);">"From sketch, to game."</p>
+    
+      <div class="footer-links">
+        <a href="./">Home</a>
+        <a href="privacy">Privacy Policy</a>
+        <a href="terms">Terms of Service</a>
+        <a href="contact">Contact</a>
+      </div>
+      <div class="social-links">
+        <a href="https://www.tiktok.com/@sketch.dev.studio" target="_blank" rel="noopener">TikTok</a>
+        <a href="https://www.instagram.com/sketch.dev.studio" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.youtube.com/@sketchdevstudio" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://play.google.com/store/apps/developer?id=Sketch+Dev+Studio" target="_blank" rel="noopener">Google Play</a>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<button class="back-top" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑</button>
+
+<script>
+  let currentLang = 'en';
+
+  function toggleLang() {
+    const idSection = document.getElementById('lang-id');
+    const enSection = document.getElementById('lang-en');
+    const btn = document.getElementById('langBtn');
+
+    if (currentLang === 'id') {
+      idSection.classList.remove('active');
+      enSection.classList.add('active');
+      btn.textContent = '🇮🇩 Indonesia';
+      document.documentElement.lang = 'en';
+      currentLang = 'en';
+    } else {
+      enSection.classList.remove('active');
+      idSection.classList.add('active');
+      btn.textContent = '🇬🇧 English';
+      document.documentElement.lang = 'id';
+      currentLang = 'id';
+    }
+    localStorage.setItem('terms-lang', currentLang);
+  }
+
+  let currentMode = 'light';
+
+  function toggleMode() {
+    const btn = document.getElementById('modeBtn');
+    document.body.classList.toggle('dark');
+
+    if (currentMode === 'light') {
+      btn.textContent = '☀️ Terang';
+      currentMode = 'dark';
+      localStorage.setItem('terms-mode', 'dark');
+    } else {
+      btn.textContent = '🌙 Gelap';
+      currentMode = 'light';
+      localStorage.setItem('terms-mode', 'light');
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const savedMode = localStorage.getItem('terms-mode');
+    const savedLang = localStorage.getItem('terms-lang');
+
+    if (savedMode === 'dark') {
+      document.body.classList.add('dark');
+      document.getElementById('modeBtn').textContent = '☀️ Terang';
+      currentMode = 'dark';
+    }
+    if (savedLang === 'id') {
+      toggleLang();
+    }
+  });
+</script>
+
+</body>
+</html>

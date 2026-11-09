@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Sketch Dev Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<style>
+  /* ===== VARIABEL WARNA ===== */
+  :root {
+    --bg-outer: #b8b8b8;
+    --bg-outer-stripe: #b0b0b0;
+    --paper: #ffffff;
+    --paper-line: #c8c8c8;
+    --paper-margin: #9a9a9a;
+    --paper-hole: #8a8a8a;
+    --paper-hole-ring: #c0c0c0;
+    --text: #1a1a1a;
+    --text-soft: #555555;
+    --text-faint: #666666;
+    --line: #1a1a1a;
+    --note-bg: #f0f0f0;
+    --note-border: #1a1a1a;
+    --highlight: #d8d8d8;
+    --card-bg: #f8f8f8;
+    --card-border: #1a1a1a;
+    --input-bg: #ffffff;
+    --input-border: #1a1a1a;
+    --shadow-1: rgba(0,0,0,0.2);
+    --shadow-2: rgba(0,0,0,0.25);
+    --shadow-3: rgba(0,0,0,0.15);
+    --btn-bg: #1a1a1a;
+    --btn-text: #ffffff;
+    --btn-shadow: rgba(0,0,0,0.35);
+  }
+
+  body.dark {
+    --bg-outer: #2a2a2a;
+    --bg-outer-stripe: #232323;
+    --paper: #1a1a1a;
+    --paper-line: #333333;
+    --paper-margin: #555555;
+    --paper-hole: #444444;
+    --paper-hole-ring: #2a2a2a;
+    --text: #e8e8e8;
+    --text-soft: #aaaaaa;
+    --text-faint: #888888;
+    --line: #e8e8e8;
+    --note-bg: #252525;
+    --note-border: #e8e8e8;
+    --highlight: #3a3a3a;
+    --card-bg: #222222;
+    --card-border: #e8e8e8;
+    --input-bg: #252525;
+    --input-border: #e8e8e8;
+    --shadow-1: rgba(0,0,0,0.5);
+    --shadow-2: rgba(0,0,0,0.6);
+    --shadow-3: rgba(0,0,0,0.4);
+    --btn-bg: #e8e8e8;
+    --btn-text: #1a1a1a;
+    --btn-shadow: rgba(0,0,0,0.6);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', 'Segoe UI', Arial, sans-serif;
+    background: var(--bg-outer);
+    background-image:
+      repeating-linear-gradient(45deg,
+        var(--bg-outer-stripe) 0px,
+        var(--bg-outer-stripe) 2px,
+        var(--bg-outer) 2px,
+        var(--bg-outer) 6px);
+    padding: 50px 20px 100px;
+    color: var(--text);
+    line-height: 1.9;
+    min-height: 100vh;
+    transition: background 0.4s ease, color 0.4s ease;
+  }
+
+  /* ===== KONTROL ATAS ===== */
+  .controls {
+    position: fixed;
+    top: 20px; right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 100;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .control-btn {
+    font-family: 'Nunito', 'Segoe UI', Arial, sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 8px 16px;
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    border: 2px solid var(--btn-bg);
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 2px 3px 0 var(--btn-shadow);
+    transition: transform 0.15s, background 0.3s, color 0.3s;
+  }
+
+  .control-btn:hover { transform: translateY(-2px); }
+  .control-btn:active {
+    transform: translateY(0);
+    box-shadow: 1px 1px 0 var(--btn-shadow);
+  }
+
+  /* ===== KERTAS BUKU TULIS ===== */
+  .paper {
+    max-width: 850px;
+    margin: 0 auto;
+    background: var(--paper);
+    background-image:
+      repeating-linear-gradient(to bottom,
+        transparent 0px,
+        transparent 31px,
+        var(--paper-line) 31px,
+        var(--paper-line) 32px);
+    padding: 70px 70px 70px 95px;
+    position: relative;
+    box-shadow:
+      0 2px 4px var(--shadow-1),
+      0 10px 25px var(--shadow-2),
+      0 25px 50px var(--shadow-3);
+    border-radius: 2px;
+    transform: rotate(-0.2deg);
+    transition: background 0.4s ease;
+  }
+
+  .paper::before {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0; left: 65px;
+    width: 2px;
+    background: var(--paper-margin);
+    opacity: 0.7;
+  }
+
+  .paper::after {
+    content: '';
+    position: absolute;
+    left: 25px; top: 0; bottom: 0;
+    width: 20px;
+    background-image:
+      radial-gradient(circle, var(--paper-hole) 7px, var(--paper-hole-ring) 8px, transparent 9px),
+      radial-gradient(circle, var(--paper-hole) 7px, var(--paper-hole-ring) 8px, transparent 9px),
+      radial-gradient(circle, var(--paper-hole) 7px, var(--paper-hole-ring) 8px, transparent 9px);
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: center 15%, center 50%, center 85%;
+  }
+
+  /* ===== JUDUL ===== */
+  h1 {
+    font-family: 'Caveat', cursive;
+    font-size: 3.4rem;
+    font-weight: 700;
+    color: var(--text);
+    text-align: center;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+    display: block;
+    width: 100%;
+  }
+
+  h1::after {
+    content: '';
+    display: block;
+    width: 240px;
+    height: 2px;
+    background: var(--line);
+    margin: 12px auto 0;
+    transform: rotate(-0.6deg);
+    opacity: 0.85;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 1.35rem;
+    color: var(--text-soft);
+    margin-bottom: 50px;
+    font-style: italic;
+  }
+
+  /* ===== PEMISAH ===== */
+  .sketch-divider {
+    height: 18px;
+    margin: 40px 0;
+    position: relative;
+  }
+
+  .sketch-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 0; right: 0;
+    height: 1.5px;
+    background: var(--line);
+    opacity: 0.65;
+    transform: rotate(0.3deg);
+  }
+
+  .sketch-divider::after {
+    content: '';
+    position: absolute;
+    top: calc(50% - 3px); left: 3%; right: 3%;
+    height: 1px;
+    background: var(--line);
+    opacity: 0.4;
+    transform: rotate(-0.5deg);
+  }
+
+  /* ===== HEADING ===== */
+  h2 {
+    font-family: 'Nunito', 'Segoe UI', Arial, sans-serif;
+    font-weight: 800;
+    font-size: 2.1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 38px 0 14px;
+    position: relative;
+    padding-left: 30px;
+    display: block;
+  }
+
+  h2::before {
+    content: '✏';
+    position: absolute;
+    left: 0; top: 2px;
+    font-size: 1.3rem;
+    opacity: 0.85;
+  }
+
+  h2::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 1.5px;
+    background: var(--line);
+    margin-top: 6px;
+    opacity: 0.55;
+    transform: rotate(0.2deg);
+  }
+
+  p {
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+    color: var(--text);
+    text-align: justify;
+  }
+
+  ul, ol {
+    margin: 12px 0 22px 35px;
+    font-size: 1.2rem;
+  }
+
+  li { margin-bottom: 9px; color: var(--text); }
+  ul li::marker { color: var(--text); }
+
+  /* ===== KOTAK CATATAN ===== */
+  .note {
+    background: var(--note-bg);
+    border: 2px dashed var(--note-border);
+    border-radius: 6px;
+    padding: 22px 28px;
+    margin: 28px 0;
+    position: relative;
+    transform: rotate(-0.4deg);
+    box-shadow: 2px 3px 0 var(--shadow-1);
+  }
+
+  .note::before {
+    content: '📌';
+    position: absolute;
+    top: -16px; left: 22px;
+    font-size: 1.5rem;
+    transform: rotate(-15deg);
+    filter: grayscale(100%);
+  }
+
+  .note strong {
+    font-size: 1.25rem;
+    display: block;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+
+  .highlight {
+    background: var(--highlight);
+    padding: 1px 5px;
+    font-weight: 700;
+    border-radius: 2px;
+    color: var(--text);
+  }
+
+  /* ===== KARTU KONTAK ===== */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin: 25px 0;
+  }
+
+  .contact-card {
+    background: var(--card-bg);
+    border: 2px solid var(--card-border);
+    border-radius: 8px;
+    padding: 25px 22px;
+    text-align: center;
+    box-shadow: 3px 4px 0 var(--shadow-1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    color: var(--text);
+    display: block;
+    transform: rotate(-0.5deg);
+  }
+
+  .contact-card:nth-child(2) { transform: rotate(0.6deg); }
+  .contact-card:nth-child(3) { transform: rotate(-0.3deg); }
+  .contact-card:nth-child(4) { transform: rotate(0.4deg); }
+
+  .contact-card:hover {
+    transform: translateY(-5px) rotate(0deg);
+    box-shadow: 5px 7px 0 var(--shadow-1);
+  }
+
+  .contact-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 10px;
+    filter: grayscale(100%);
+  }
+
+  .contact-title {
+    font-family: 'Caveat', cursive;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .contact-value {
+    font-size: 1.1rem;
+    color: var(--text-soft);
+    margin: 0;
+    text-align: center;
+    word-break: break-all;
+  }
+
+  /* ===== FORM KONTAK ===== */
+  .contact-form {
+    background: var(--card-bg);
+    border: 2px solid var(--card-border);
+    border-radius: 8px;
+    padding: 30px 28px;
+    margin: 25px 0;
+    box-shadow: 3px 4px 0 var(--shadow-1);
+    transform: rotate(-0.2deg);
+  }
+
+  .form-group {
+    margin-bottom: 22px;
+  }
+
+  .form-group label {
+    font-family: 'Caveat', cursive;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text);
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    font-family: 'Nunito', 'Segoe UI', Arial, sans-serif;
+    font-size: 1.15rem;
+    padding: 12px 16px;
+    background: var(--input-bg);
+    color: var(--text);
+    border: 2px solid var(--input-border);
+    border-radius: 6px;
+    outline: none;
+    transition: box-shadow 0.2s, background 0.3s, color 0.3s;
+    box-shadow: 2px 2px 0 var(--shadow-1);
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    box-shadow: 3px 3px 0 var(--shadow-2);
+  }
+
+  .form-group textarea {
+    min-height: 140px;
+    resize: vertical;
+  }
+
+  .form-group select {
+    cursor: pointer;
+  }
+
+  .form-btn {
+    font-family: 'Caveat', cursive;
+    font-size: 1.5rem;
+    font-weight: 700;
+    padding: 14px 38px;
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    border: 2.5px solid var(--btn-bg);
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 3px 4px 0 var(--btn-shadow);
+    transition: transform 0.15s, background 0.3s, color 0.3s;
+    letter-spacing: 0.5px;
+    display: block;
+    width: 100%;
+  }
+
+  .form-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 4px 6px 0 var(--btn-shadow);
+  }
+
+  .form-btn:active {
+    transform: translateY(0);
+    box-shadow: 2px 2px 0 var(--btn-shadow);
+  }
+
+  /* ===== FAQ ===== */
+  .faq-item {
+    margin-bottom: 18px;
+    padding: 16px 20px;
+    border-left: 3px solid var(--line);
+    background: var(--card-bg);
+    border-radius: 0 6px 6px 0;
+  }
+
+  .faq-q {
+    font-family: 'Caveat', cursive;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .faq-a {
+    font-size: 1.15rem;
+    color: var(--text-soft);
+    margin: 0;
+    text-align: left;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    margin-top: 55px;
+    padding-top: 28px;
+    border-top: 2px dashed var(--line);
+    text-align: center;
+    font-size: 1.15rem;
+    color: var(--text-soft);
+  }
+
+
+  .footer-links {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 22px;
+    font-size: 1.1rem;
+  }
+
+  .footer-links a {
+    color: var(--text-soft);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--text-soft);
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover {
+    color: var(--text);
+  }
+  .social-links {
+    margin-top: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .social-links a {
+    color: var(--text-soft);
+    text-decoration: none;
+    border: 1.5px dashed var(--line);
+    border-radius: 999px;
+    padding: 4px 18px;
+    font-size: 1.05rem;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .social-links a:hover {
+    color: var(--text);
+    border-style: solid;
+  }
+
+
+  .signature {
+    font-family: 'Caveat', cursive;
+    font-size: 1.8rem;
+    color: var(--text);
+    margin-top: 22px;
+    transform: rotate(-2deg);
+    display: inline-block;
+  }
+
+  /* ===== BACK TO TOP ===== */
+  .back-top {
+    position: fixed;
+    bottom: 30px; right: 30px;
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    border: 2px solid var(--btn-bg);
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    font-size: 1.6rem;
+    cursor: pointer;
+    box-shadow: 3px 4px 0 var(--btn-shadow);
+    transition: transform 0.2s, background 0.3s, color 0.3s;
+    font-family: 'Nunito', 'Segoe UI', Arial, sans-serif;
+    font-weight: 700;
+    z-index: 100;
+  }
+
+  .back-top:hover {
+    transform: translateY(-3px) rotate(-5deg);
+    background: var(--paper);
+    color: var(--text);
+  }
+
+  /* ===== BAHASA ===== */
+  .lang-section { display: none; }
+  .lang-section.active { display: block; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 600px) {
+    .paper { padding: 40px 25px 50px 60px; transform: none; }
+    .paper::before { left: 40px; }
+    .paper::after { left: 12px; }
+    h1 { font-size: 2.3rem; }
+    h2 { font-size: 1.65rem; padding-left: 25px; }
+    h2::before { font-size: 1.05rem; }
+    p, li { font-size: 1.08rem; }
+    body { padding: 15px 10px 90px; }
+    .controls { top: 10px; right: 10px; gap: 6px; }
+    .control-btn { font-size: 0.95rem; padding: 6px 10px; }
+    .form-btn { font-size: 1.3rem; padding: 12px 28px; }
+  }
+
+  /* ===== ANIMASI ===== */
+  @keyframes writeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .paper > * { animation: writeIn 0.6s ease-out both; }
+</style>
+</head>
+<body>
+
+<div class="controls">
+  <button class="control-btn" id="langBtn" onclick="toggleLang()">🇮🇩 Indonesia</button>
+  <button class="control-btn" id="modeBtn" onclick="toggleMode()">🌙 Gelap</button>
+</div>
+
+<div class="paper">
+
+  <!-- ============================================
+       BAHASA INDONESIA
+       ============================================ -->
+  <div class="lang-section" id="lang-id">
+
+    <h1>Hubungi Kami</h1>
+    <p class="subtitle">Sketch Dev Studio — "Dari goresan, jadi game."</p>
+
+    <p>
+      Ada pertanyaan, saran, atau butuh bantuan? Kami senang
+      mendengar dari Anda! Pilih salah satu cara di bawah ini
+      untuk menghubungi <span class="highlight">Sketch Dev Studio</span>.
+    </p>
+
+    <div class="sketch-divider"></div>
+
+    <h2>Cara Menghubungi</h2>
+
+    <div class="contact-grid">
+      <a href="mailto:support@sketchdev.my.id" class="contact-card">
+        <span class="contact-icon">📧</span>
+        <span class="contact-title">Email Umum</span>
+        <p class="contact-value">support@sketchdev.my.id</p>
+      </a>
+
+      <a href="mailto:support@sketchdev.my.id" class="contact-card">
+        <span class="contact-icon">🛠️</span>
+        <span class="contact-title">Dukungan Game</span>
+        <p class="contact-value">support@sketchdev.my.id</p>
+      </a>
+
+      <a href="mailto:support@sketchdev.my.id" class="contact-card">
+        <span class="contact-icon">🔒</span>
+        <span class="contact-title">Privasi</span>
+        <p class="contact-value">support@sketchdev.my.id</p>
+      </a>
+
+      <a href="mailto:support@sketchdev.my.id" class="contact-card">
+        <span class="contact-icon">📜</span>
+        <span class="contact-title">Legal</span>
+        <p class="contact-value">support@sketchdev.my.id</p>
+      </a>
+    </div>
+
+    <div class="sketch-divider"></div>
+
+    <h2>Alamat & Jam Operasional</h2>
+    <ul>
+      <li>📍 <strong>Alamat:</strong> Indonesia</li>
+      <li>🕐 <strong>Jam Kerja:</strong> Senin–Jumat, 09.00–17.00 WIB</li>
+      <li>⏱️ <strong>Waktu Respons:</strong> 1–3 hari kerja</li>
+      <li>🌐 <strong>Website:</strong> sketchdev.my.id</li>
+    </ul>
+
+    <div class="note">
+      <strong>💡 Tips:</strong>
+      Untuk mempercepat respons, sertakan nama game, versi
+      aplikasi, dan jenis perangkat Anda saat menghubungi kami.
+    </div>
+
+    <div class="sketch-divider"></div>
+
+    <h2>Kirim Pesan</h2>
+    <p>
+      Isi formulir di bawah ini — pesan akan langsung terkirim
+      ke email kami.
+    </p>
+
+    <form class="contact-form" onsubmit="sendMail(event)">
+      <div class="form-group">
+        <label for="name-id">👤 Nama Anda</label>
+        <input type="text" id="name-id" placeholder="Tulis nama Anda..." required>
+      </div>
+
+      <div class="form-group">
+        <label for="topic-id">📌 Topik</label>
+        <select id="topic-id" required>
+          <option value="">-- Pilih Topik --</option>
+          <option value="Bug Report">Laporan Bug</option>
+          <option value="Game Support">Dukungan Game</option>
+          <option value="Privacy">Pertanyaan Privasi</option>
+          <option value="Legal">Pertanyaan Legal</option>
+          <option value="Collaboration">Kerja Sama</option>
+          <option value="Other">Lainnya</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="message-id">✏️ Pesan</label>
+        <textarea id="message-id" placeholder="Tulis pesan Anda di sini..." required></textarea>
+      </div>
+
+      <button type="submit" class="form-btn">📨 Kirim Pesan</button>
+    </form>
+
+    <div class="sketch-divider"></div>
+
+    <h2>Pertanyaan yang Sering Diajukan (FAQ)</h2>
+
+    <div class="faq-item">
+      <span class="faq-q">❓ Bagaimana cara melaporkan bug?</span>
+      <p class="faq-a">
+        Kirim email ke <strong>support@sketchdev.my.id</strong> dengan
+        judul "Bug Report — [Nama Game]". Sertakan screenshot,
+        versi aplikasi, dan jenis perangkat.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <span class="faq-q">❓ Bagaimana cara meminta pengembalian dana?</span>
+      <p class="faq-a">
+        Semua pembelian diproses oleh Google Play. Untuk
+        pengembalian dana, hubungi <strong>Google Play Support</strong>
+        terlebih dahulu sesuai kebijakan mereka.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <span class="faq-q">❓ Apakah game bisa dimainkan offline?</span>
+      <p class="faq-a">
+        Sebagian besar game kami bisa dimainkan offline. Namun
+        beberapa fitur mungkin memerlukan koneksi internet.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <span class="faq-q">❓ Bagaimana cara menghapus data saya?</span>
+      <p class="faq-a">
+        Kirim permintaan ke <strong>support@sketchdev.my.id</strong>
+        dengan subjek "Hapus Data". Kami akan memproses dalam
+        7 hari kerja.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <span class="faq-q">❓ Apakah kalian menerima kerja sama?</span>
+      <p class="faq-a">
+        Ya! Kirim proposal ke <strong>support@sketchdev.my.id</strong>
+        dengan subjek "Kerja Sama".
+      </p>
+    </div>
+
+    <div class="sketch-divider"></div>
+
+    <h2>Ikuti Kami</h2>
+    <p>
+      Dapatkan update terbaru tentang game dan proyek kami
+      melalui media sosial:
+    </p>
+    <ul>
+      <li>🎵 TikTok: <a href="https://www.tiktok.com/@sketch.dev.studio" target="_blank" rel="noopener" class="highlight">@sketch.dev.studio</a></li>
+      <li>📷 Instagram: <a href="https://www.instagram.com/sketch.dev.studio" target="_blank" rel="noopener" class="highlight">@sketch.dev.studio</a></li>
+      <li>▶️ YouTube: <a href="https://www.youtube.com/@sketchdevstudio" target="_blank" rel="noopener" class="highlight">@sketchdevstudio</a></li>
+      <li>🎮 Google Play: <a href="https://play.google.com/store/apps/developer?id=Sketch+Dev+Studio" target="_blank" rel="noopener" class="highlight">Sketch Dev Studio</a></li>
+    </ul>
+
+    <div class="footer">
+      <p>Kami siap membantu Anda</p>
+      <p class="signature">✏ Sketch Dev Studio</p>
+      <p style="margin-top:12px; font-size:1.05rem; color:var(--text-faint);">"Dari goresan, jadi game."</p>
+    
+      <div class="footer-links">
+        <a href="./">Beranda</a>
+        <a href="privacy">Kebijakan Privasi</a>
+        <a href="terms">Syarat & Ketentuan</a>
+        <a href="contact">Kontak</a>
+      </div>
+      <div class="social-links">
+        <a href="https://www.tiktok.com/@sketch.dev.studio" target="_blank" rel="noopener">TikTok</a>
+        <a href="https://www.instagram.com/sketch.dev.studio" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.youtube.com/@sketchdevstudio" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://play.google.com/store/apps/developer?id=Sketch+Dev+Studio" target="_blank" rel="noopener">Google Play</a>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ============================================
+       BAHASA INGGRIS
+       ============================================ -->
+  <div class="lang-section active" id="lang-en">
+
+    <h1>Contact Us</h1>
+    <p class="subtitle">Sketch Dev Studio — "From sketch, to game."</p>
+
+    <p>
+      Have a question, suggestion, or need help? We'd love to
+      hear from you! Choose one of the ways below to contact
+      <span class="highlight">Sketch Dev Studio</span>.
+    </p>
+
+    <div class="sketch-divider"></div>
+
+    <h2>How to Reach Us</h2>
+
+    <div class="contact-grid">
+      <a href="mailto:support@sketchdev.my.id" class="contact-card">
+        <span class="contact-icon">📧</span>
+        <span class="contact-title">General Email</span>
+        <p class="contact-value">support@sketchdev.my.id</p>
+      </a>
+
+      <a href="mailto:support@sketchdev.my.id" class="contact-card">
+        <span class="contact-icon">🛠️</span>
+        <span class="contact-title">Game Support</span>
+        <p class="contact-value">support@sketchdev.my.id</p>
+      </a>
+
+      <a href="mailto:support@sketchdev.my.id" class="contact-card">
+        <span class="contact-icon">🔒</span>
+        <span class="contact-title">Privacy</span>
+        <p class="contact-value">support@sketchdev.my.id</p>
+      </a>
+
+      <a href="mailto:support@sketchdev.my.id" class="contact-card">
+        <span class="contact-icon">📜</span>
+        <span class="contact-title">Legal</span>
+        <p class="contact-value">support@sketchdev.my.id</p>
+      </a>
+    </div>
+
+    <div class="sketch-divider"></div>
+
+    <h2>Address & Operating Hours</h2>
+    <ul>
+      <li>📍 <strong>Address:</strong> Indonesia</li>
+      <li>🕐 <strong>Working Hours:</strong> Monday–Friday, 09:00–17:00 WIB</li>
+      <li>⏱️ <strong>Response Time:</strong> 1–3 business days</li>
+      <li>🌐 <strong>Website:</strong> sketchdev.my.id</li>
+    </ul>
+
+    <div class="note">
+      <strong>💡 Tip:</strong>
+      To speed up our response, please include the game name,
+      app version, and your device type when contacting us.
+    </div>
+
+    <div class="sketch-divider"></div>
+
+    <h2>Send a Message</h2>
+    <p>
+      Fill out the form below — your message will be sent
+      directly to our email.
+    </p>
+
+    <form class="contact-form" onsubmit="sendMail(event)">
+      <div class="form-group">
+        <label for="name-en">👤 Your Name</label>
+        <input type="text" id="name-en" placeholder="Write your name..." required>
+      </div>
+
+      <div class="form-group">
+        <label for="topic-en">📌 Topic</label>
+        <select id="topic-en" required>
+          <option value="">-- Choose a Topic --</option>
+          <option value="Bug Report">Bug Report</option>
+          <option value="Game Support">Game Support</option>
+          <option value="Privacy">Privacy Question</option>
+          <option value="Legal">Legal Question</option>
+          <option value="Collaboration">Collaboration</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="message-en">✏️ Message</label>
+        <textarea id="message-en" placeholder="Write your message here..." required></textarea>
+      </div>
+
+      <button type="submit" class="form-btn">📨 Send Message</button>
+    </form>
+
+    <div class="sketch-divider"></div>
+
+    <h2>Frequently Asked Questions (FAQ)</h2>
+
+    <div class="faq-item">
+      <span class="faq-q">❓ How do I report a bug?</span>
+      <p class="faq-a">
+        Email <strong>support@sketchdev.my.id</strong> with the subject
+        "Bug Report — [Game Name]". Include screenshots, app version,
+        and device type.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <span class="faq-q">❓ How do I request a refund?</span>
+      <p class="faq-a">
+        All purchases are processed by Google Play. For refunds,
+        please contact <strong>Google Play Support</strong> first
+        according to their policy.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <span class="faq-q">❓ Can the games be played offline?</span>
+      <p class="faq-a">
+        Most of our games can be played offline. However, some
+        features may require an internet connection.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <span class="faq-q">❓ How do I delete my data?</span>
+      <p class="faq-a">
+        Send a request to <strong>support@sketchdev.my.id</strong>
+        with the subject "Data Deletion". We will process it
+        within 7 business days.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <span class="faq-q">❓ Do you accept collaborations?</span>
+      <p class="faq-a">
+        Yes! Send your proposal to <strong>support@sketchdev.my.id</strong>
+        with the subject "Collaboration".
+      </p>
+    </div>
+
+    <div class="sketch-divider"></div>
+
+    <h2>Follow Us</h2>
+    <p>
+      Get the latest updates about our games and projects
+      through social media:
+    </p>
+    <ul>
+      <li>🎵 TikTok: <a href="https://www.tiktok.com/@sketch.dev.studio" target="_blank" rel="noopener" class="highlight">@sketch.dev.studio</a></li>
+      <li>📷 Instagram: <a href="https://www.instagram.com/sketch.dev.studio" target="_blank" rel="noopener" class="highlight">@sketch.dev.studio</a></li>
+      <li>▶️ YouTube: <a href="https://www.youtube.com/@sketchdevstudio" target="_blank" rel="noopener" class="highlight">@sketchdevstudio</a></li>
+      <li>🎮 Google Play: <a href="https://play.google.com/store/apps/developer?id=Sketch+Dev+Studio" target="_blank" rel="noopener" class="highlight">Sketch Dev Studio</a></li>
+    </ul>
+
+    <div class="footer">
+      <p>We're here to help you</p>
+      <p class="signature">✏ Sketch Dev Studio</p>
+      <p style="margin-top:12px; font-size:1.05rem; color:var(--text-faint);">"From sketch, to game."</p>
+    
+      <div class="footer-links">
+        <a href="./">Home</a>
+        <a href="privacy">Privacy Policy</a>
+        <a href="terms">Terms of Service</a>
+        <a href="contact">Contact</a>
+      </div>
+      <div class="social-links">
+        <a href="https://www.tiktok.com/@sketch.dev.studio" target="_blank" rel="noopener">TikTok</a>
+        <a href="https://www.instagram.com/sketch.dev.studio" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.youtube.com/@sketchdevstudio" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://play.google.com/store/apps/developer?id=Sketch+Dev+Studio" target="_blank" rel="noopener">Google Play</a>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<button class="back-top" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑</button>
+
+<script>
+  /* ============================================
+     TOGGLE BAHASA
+     ============================================ */
+  let currentLang = 'en';
+
+  function toggleLang() {
+    const idSection = document.getElementById('lang-id');
+    const enSection = document.getElementById('lang-en');
+    const btn = document.getElementById('langBtn');
+
+    if (currentLang === 'id') {
+      idSection.classList.remove('active');
+      enSection.classList.add('active');
+      btn.textContent = '🇮🇩 Indonesia';
+      document.documentElement.lang = 'en';
+      currentLang = 'en';
+    } else {
+      enSection.classList.remove('active');
+      idSection.classList.add('active');
+      btn.textContent = '🇬🇧 English';
+      document.documentElement.lang = 'id';
+      currentLang = 'id';
+    }
+    localStorage.setItem('contact-lang', currentLang);
+  }
+
+  /* ============================================
+     TOGGLE MODE GELAP
+     ============================================ */
+  let currentMode = 'light';
+
+  function toggleMode() {
+    const btn = document.getElementById('modeBtn');
+    document.body.classList.toggle('dark');
+
+    if (currentMode === 'light') {
+      btn.textContent = '☀️ Terang';
+      currentMode = 'dark';
+      localStorage.setItem('contact-mode', 'dark');
+    } else {
+      btn.textContent = '🌙 Gelap';
+      currentMode = 'light';
+      localStorage.setItem('contact-mode', 'light');
+    }
+  }
+
+  /* ============================================
+     FORM KIRIM PESAN (mailto)
+     ============================================ */
+  function sendMail(e) {
+    e.preventDefault();
+
+    const isID = currentLang === 'id';
+    const nameId = document.getElementById('name-id');
+    const nameEn = document.getElementById('name-en');
+    const topicId = document.getElementById('topic-id');
+    const topicEn = document.getElementById('topic-en');
+    const msgId = document.getElementById('message-id');
+    const msgEn = document.getElementById('message-en');
+
+    const name = isID ? nameId.value : nameEn.value;
+    const topic = isID ? topicId.value : topicEn.value;
+    const message = isID ? msgId.value : msgEn.value;
+
+    const subject = encodeURIComponent(`[${topic}] - ${name}`);
+    const body = encodeURIComponent(
+      (isID ? 'Nama: ' : 'Name: ') + name + '\n' +
+      (isID ? 'Topik: ' : 'Topic: ') + topic + '\n\n' +
+      (isID ? 'Pesan:' : 'Message:') + '\n' + message
+    );
+
+    window.location.href = `mailto:support@sketchdev.my.id?subject=${subject}&body=${body}`;
+  }
+
+  /* ============================================
+     LOAD PREFERENSI
+     ============================================ */
+  window.addEventListener('DOMContentLoaded', () => {
+    const savedMode = localStorage.getItem('contact-mode');
+    const savedLang = localStorage.getItem('contact-lang');
+
+    if (savedMode === 'dark') {
+      document.body.classList.add('dark');
+      document.getElementById('modeBtn').textContent = '☀️ Terang';
+      currentMode = 'dark';
+    }
+    if (savedLang === 'id') {
+      toggleLang();
+    }
+  });
+</script>
+
+</body>
+</html>
