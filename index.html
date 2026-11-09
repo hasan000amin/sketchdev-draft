@@ -9,16 +9,17 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
 <script type="importmap">
 { "imports": {
   "three": "./vendor/three.module.min.js",
   "three/addons/": "./vendor/addons/"
 } }
 </script>
-<link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
+<div id="scene" aria-hidden="true"></div>
 
 <nav>
   <a class="logo" href="#top">SKETCH<em>DEV</em>STUDIO</a>
@@ -31,85 +32,86 @@
 </nav>
 
 <header class="hero" id="top">
-  <div id="scene" aria-hidden="true"></div>
-  <div class="hero-shade"></div>
-  <div class="hero-ui">
-    <div class="hero-top">
-      <div class="hero-kicker"><b>●</b>&nbsp; <span data-en="Indie game studio — Jakarta, Indonesia" data-id="Studio game indie — Jakarta, Indonesia">Indie game studio — Jakarta, Indonesia</span></div>
-      <div class="hero-note" data-en="every game starts as a pencil sketch ✎" data-id="setiap game berawal dari sketsa pensil ✎">every game starts as a pencil sketch ✎</div>
+  <div class="panel hero-card">
+    <div class="tape"></div>
+    <div class="hero-kicker"><b>●</b>&nbsp; <span data-en="Indie game studio — Jakarta, Indonesia" data-id="Studio game indie — Jakarta, Indonesia">Indie game studio — Jakarta, Indonesia</span></div>
+    <h1>Hand-drawn <span class="amber">games</span>,<br>drawn slowly —<br>played <span class="terra">everywhere</span>.</h1>
+    <p class="hero-desc" data-en="Welcome to our paper world. We hand-draw small, joyful games — quizzes, snakes, cats and falling numbers — 100 levels each, in English &amp; Indonesian. Scroll, and the world turns with you." data-id="Selamat datang di dunia kertas kami. Kami menggambar game kecil yang ceria dengan tangan — kuis, ular, kucing, dan angka yang jatuh — masing-masing 100 level, dalam Bahasa Indonesia &amp; Inggris. Gulir, dan dunianya ikut berputar bersamamu.">Welcome to our paper world. We hand-draw small, joyful games — quizzes, snakes, cats and falling numbers — 100 levels each, in English &amp; Indonesian. Scroll, and the world turns with you.</p>
+    <div class="hero-cta">
+      <a class="btn" href="#games"><span data-en="Explore our games" data-id="Lihat game kami">Explore our games</span> ↓</a>
+      <a class="btn ghost" href="https://play.google.com/store/apps/details?id=id.my.sketchdev.letterrain" target="_blank" rel="noopener">▶ <span data-en="Play Letter Rain" data-id="Mainkan Letter Rain">Play Letter Rain</span></a>
     </div>
-    <div class="hero-bottom">
-      <h1><span class="thin" data-en="Hand-drawn games," data-id="Game gambar tangan,">Hand-drawn games,</span><br>
-      <span data-en="drawn slowly —" data-id="digambar perlahan —">drawn slowly —</span> <span class="amber" data-en="played everywhere." data-id="dimainkan di mana saja.">played everywhere.</span></h1>
-      <p class="hero-desc" data-en="We are Sketch Dev Studio. We hand-draw small, joyful games — quizzes, snakes, cats and falling numbers — 100 levels each, in English &amp; Indonesian. Move your mouse: the board is alive." data-id="Kami Sketch Dev Studio. Kami menggambar game kecil yang ceria dengan tangan — kuis, ular, kucing, dan angka yang jatuh — masing-masing 100 level, dalam Bahasa Indonesia &amp; Inggris. Gerakkan mouse-mu: papan ini hidup.">We are Sketch Dev Studio. We hand-draw small, joyful games — quizzes, snakes, cats and falling numbers — 100 levels each, in English &amp; Indonesian. Move your mouse: the board is alive.</p>
-      <div class="hero-cta">
-        <a class="btn" href="#games"><span data-en="Explore our games" data-id="Lihat game kami">Explore our games</span> ↓</a>
-        <a class="btn ghost" href="https://play.google.com/store/apps/details?id=id.my.sketchdev.letterrain" target="_blank" rel="noopener">▶ <span data-en="Play Letter Rain" data-id="Mainkan Letter Rain">Play Letter Rain</span></a>
-      </div>
-    </div>
+    <div class="hero-note" data-en="psst — follow the cat, she knows the way ✎" data-id="psst — ikuti si kucing, dia tahu jalannya ✎">psst — follow the cat, she knows the way ✎</div>
   </div>
-  <div class="scroll-cue" data-en="Scroll" data-id="Gulir">Scroll</div>
+  <div class="scroll-cue" data-en="scroll to explore ↓" data-id="gulir untuk menjelajah ↓">scroll to explore ↓</div>
 </header>
 
 <div class="marquee" aria-hidden="true"><div class="track" id="mqTrack"></div></div>
 
+<main>
 <section id="about">
-  <div class="sec-head rv">
-    <span class="no">( 01 )</span>
-    <h2 data-en="The Studio" data-id="Studionya">The Studio</h2>
-    <p data-en="A tiny team with big pencils. No engines of war — just paper, patience, and play." data-id="Tim kecil dengan pensil besar. Tanpa mesin perang — hanya kertas, kesabaran, dan bermain.">A tiny team with big pencils. No engines of war — just paper, patience, and play.</p>
-  </div>
-  <p class="manifesto rv">We believe a game does not need <span class="hl">explosions</span> to be unforgettable. Ours begin on <span class="un">paper</span> — one pencil sketch at a time — and grow into worlds you can finish, master, and replay. <span class="hl">Small games, drawn slowly, played everywhere.</span></p>
-  <div class="mani-note rv" data-en="— drawn, coded &amp; shipped from Jakarta" data-id="— digambar, dikoding &amp; dirilis dari Jakarta">— drawn, coded &amp; shipped from Jakarta</div>
-</section>
-
-<section id="games" style="padding-top:16px">
-  <div class="sec-head rv">
-    <span class="no">( 02 )</span>
-    <h2 data-en="Our Games" data-id="Game Kami">Our Games</h2>
-    <p data-en="Six titles and counting. One is live on Google Play — the rest are in closed testing, getting sharper every day." data-id="Enam judul dan terus bertambah. Satu sudah tayang di Google Play — sisanya dalam pengujian tertutup, makin tajam setiap hari.">Six titles and counting. One is live on Google Play — the rest are in closed testing, getting sharper every day.</p>
-  </div>
-  <div class="game-rows">
-    <a class="grow-row rv" href="https://play.google.com/store/apps/details?id=id.my.sketchdev.letterrain" target="_blank" rel="noopener">
-      <span class="idx">01</span>
-      <img class="icon" src="images/letter-rain-icon.png" alt="Letter Rain icon">
-      <span><h3>Letter Rain</h3><p class="meta" data-en="Catch falling letters to answer quizzes! 100 levels in 2 languages (Indonesian &amp; English)." data-id="Tangkap huruf yang jatuh untuk menjawab kuis! 100 level dalam 2 bahasa (Indonesia &amp; Inggris).">Catch falling letters to answer quizzes! 100 levels in 2 languages (Indonesian &amp; English).</p></span>
-      <span class="pill live" data-en="On Google Play" data-id="Di Google Play">On Google Play</span>
-    </a>
-    <div class="grow-row rv">
-      <span class="idx">02</span>
-      <img class="icon" src="images/letter-snake-icon.png" alt="Letter Snake icon">
-      <span><h3>Letter Snake</h3><p class="meta" data-en="Guide the snake to eat letters and spell the quiz answers! 100 levels in 2 languages (Indonesian &amp; English)." data-id="Arahkan ular memakan huruf untuk mengeja jawaban kuis! 100 level dalam 2 bahasa (Indonesia &amp; Inggris).">Guide the snake to eat letters and spell the quiz answers! 100 levels in 2 languages (Indonesian &amp; English).</p></span>
-      <span class="pill" data-en="Closed Testing" data-id="Pengujian Tertutup">Closed Testing</span>
+  <div class="panel tilt-r narrow push-r rv">
+    <div class="tape"></div>
+    <div class="sec-head">
+      <span class="no">( 01 )</span>
+      <h2 data-en="The Studio" data-id="Studionya">The Studio</h2>
+      <p data-en="A tiny team with big pencils. No engines of war — just paper, patience, and play." data-id="Tim kecil dengan pensil besar. Tanpa mesin perang — hanya kertas, kesabaran, dan bermain.">A tiny team with big pencils. No engines of war — just paper, patience, and play.</p>
     </div>
-    <div class="grow-row rv">
-      <span class="idx">03</span>
-      <img class="icon" src="images/numerik-crisis-icon.png" alt="Numerik Crisis icon">
-      <span><h3>Numerik Crisis</h3><p class="meta" data-en="Trigger chain reactions of numbers before time runs out! A fast math puzzle with 100 levels in 2 languages (Indonesian &amp; English)." data-id="Picu reaksi berantai angka sebelum waktu habis! Puzzle matematika cepat dengan 100 level dalam 2 bahasa (Indonesia &amp; Inggris).">Trigger chain reactions of numbers before time runs out! A fast math puzzle with 100 levels in 2 languages (Indonesian &amp; English).</p></span>
-      <span class="pill" data-en="Closed Testing" data-id="Pengujian Tertutup">Closed Testing</span>
-    </div>
-    <div class="grow-row rv">
-      <span class="idx">04</span>
-      <img class="icon" src="images/number-rain-icon.png" alt="Number Rain icon">
-      <span><h3>Number Rain</h3><p class="meta" data-en="Catch falling numbers and pair them with the operator to hit every target! 100 levels in 2 languages (Indonesian &amp; English)." data-id="Tangkap angka yang jatuh dan pasangkan dengan operator untuk mencapai semua target! 100 level dalam 2 bahasa (Indonesia &amp; Inggris).">Catch falling numbers and pair them with the operator to hit every target! 100 levels in 2 languages (Indonesian &amp; English).</p></span>
-      <span class="pill" data-en="Closed Testing" data-id="Pengujian Tertutup">Closed Testing</span>
-    </div>
-    <div class="grow-row rv">
-      <span class="idx">05</span>
-      <img class="icon" src="images/number-snake-icon.png" alt="Number Snake icon">
-      <span><h3>Number Snake</h3><p class="meta" data-en="Guide Kenxia the snake to munch numbers and reach every math target! 100 levels in 2 languages (Indonesian &amp; English)." data-id="Arahkan Kenxia si ular memakan angka untuk mencapai target hitungan! 100 level dalam 2 bahasa (Indonesia &amp; Inggris).">Guide Kenxia the snake to munch numbers and reach every math target! 100 levels in 2 languages (Indonesian &amp; English).</p></span>
-      <span class="pill" data-en="Closed Testing" data-id="Pengujian Tertutup">Closed Testing</span>
-    </div>
-    <div class="grow-row rv">
-      <span class="idx">06</span>
-      <img class="icon" src="images/meowdoku-icon.png" alt="Meowdoku icon">
-      <span><h3>Meowdoku</h3><p class="meta" data-en="A cozy cat logic puzzle: place one cat in every row, column, and color region! 100 levels in 2 languages (Indonesian &amp; English)." data-id="Teka-teki logika kucing yang nyaman: tempatkan satu kucing di setiap baris, kolom, dan wilayah warna! 100 level dalam 2 bahasa (Indonesia &amp; Inggris).">A cozy cat logic puzzle: place one cat in every row, column, and color region! 100 levels in 2 languages (Indonesian &amp; English).</p></span>
-      <span class="pill" data-en="Closed Testing" data-id="Pengujian Tertutup">Closed Testing</span>
-    </div>
+    <p class="manifesto">We believe a game does not need <span class="hl">explosions</span> to be unforgettable. Ours begin on <span class="un">paper</span> — one pencil sketch at a time — and grow into worlds you can finish, master, and replay. <span class="hl">Small games, drawn slowly, played everywhere.</span></p>
+    <div class="mani-note" data-en="— drawn, coded &amp; shipped from Jakarta" data-id="— digambar, dikoding &amp; dirilis dari Jakarta">— drawn, coded &amp; shipped from Jakarta</div>
   </div>
 </section>
 
-<section style="padding-top:16px">
+<section id="games">
+  <div class="panel tilt-l rv">
+    <div class="tape"></div>
+    <div class="sec-head">
+      <span class="no">( 02 )</span>
+      <h2 data-en="Our Games" data-id="Game Kami">Our Games</h2>
+      <p data-en="Six titles and counting. One is live on Google Play — the rest are in closed testing, getting sharper every day." data-id="Enam judul dan terus bertambah. Satu sudah tayang di Google Play — sisanya dalam pengujian tertutup, makin tajam setiap hari.">Six titles and counting. One is live on Google Play — the rest are in closed testing, getting sharper every day.</p>
+    </div>
+    <div class="cards">
+      <a class="gcard" href="https://play.google.com/store/apps/details?id=id.my.sketchdev.letterrain" target="_blank" rel="noopener">
+        <span class="top"><img class="icon" src="images/letter-rain-icon.png" alt="Letter Rain icon"><span class="idx">no. 01</span></span>
+        <h3>Letter Rain</h3>
+        <p class="meta" data-en="Catch falling letters to answer quizzes! 100 levels in 2 languages (Indonesian &amp; English)." data-id="Tangkap huruf yang jatuh untuk menjawab kuis! 100 level dalam 2 bahasa (Indonesia &amp; Inggris).">Catch falling letters to answer quizzes! 100 levels in 2 languages (Indonesian &amp; English).</p>
+        <span class="pill live" data-en="On Google Play" data-id="Di Google Play">On Google Play</span>
+      </a>
+      <div class="gcard">
+        <span class="top"><img class="icon" src="images/letter-snake-icon.png" alt="Letter Snake icon"><span class="idx">no. 02</span></span>
+        <h3>Letter Snake</h3>
+        <p class="meta" data-en="Guide the snake to eat letters and spell the quiz answers! 100 levels in 2 languages (Indonesian &amp; English)." data-id="Arahkan ular memakan huruf untuk mengeja jawaban kuis! 100 level dalam 2 bahasa (Indonesia &amp; Inggris).">Guide the snake to eat letters and spell the quiz answers! 100 levels in 2 languages (Indonesian &amp; English).</p>
+        <span class="pill" data-en="Closed Testing" data-id="Pengujian Tertutup">Closed Testing</span>
+      </div>
+      <div class="gcard">
+        <span class="top"><img class="icon" src="images/numerik-crisis-icon.png" alt="Numerik Crisis icon"><span class="idx">no. 03</span></span>
+        <h3>Numerik Crisis</h3>
+        <p class="meta" data-en="Trigger chain reactions of numbers before time runs out! A fast math puzzle with 100 levels in 2 languages (Indonesian &amp; English)." data-id="Picu reaksi berantai angka sebelum waktu habis! Puzzle matematika cepat dengan 100 level dalam 2 bahasa (Indonesia &amp; Inggris).">Trigger chain reactions of numbers before time runs out! A fast math puzzle with 100 levels in 2 languages (Indonesian &amp; English).</p>
+        <span class="pill" data-en="Closed Testing" data-id="Pengujian Tertutup">Closed Testing</span>
+      </div>
+      <div class="gcard">
+        <span class="top"><img class="icon" src="images/number-rain-icon.png" alt="Number Rain icon"><span class="idx">no. 04</span></span>
+        <h3>Number Rain</h3>
+        <p class="meta" data-en="Catch falling numbers and pair them with the operator to hit every target! 100 levels in 2 languages (Indonesian &amp; English)." data-id="Tangkap angka yang jatuh dan pasangkan dengan operator untuk mencapai semua target! 100 level dalam 2 bahasa (Indonesia &amp; Inggris).">Catch falling numbers and pair them with the operator to hit every target! 100 levels in 2 languages (Indonesian &amp; English).</p>
+        <span class="pill" data-en="Closed Testing" data-id="Pengujian Tertutup">Closed Testing</span>
+      </div>
+      <div class="gcard">
+        <span class="top"><img class="icon" src="images/number-snake-icon.png" alt="Number Snake icon"><span class="idx">no. 05</span></span>
+        <h3>Number Snake</h3>
+        <p class="meta" data-en="Guide Kenxia the snake to munch numbers and reach every math target! 100 levels in 2 languages (Indonesian &amp; English)." data-id="Arahkan Kenxia si ular memakan angka untuk mencapai target hitungan! 100 level dalam 2 bahasa (Indonesia &amp; Inggris).">Guide Kenxia the snake to munch numbers and reach every math target! 100 levels in 2 languages (Indonesian &amp; English).</p>
+        <span class="pill" data-en="Closed Testing" data-id="Pengujian Tertutup">Closed Testing</span>
+      </div>
+      <div class="gcard">
+        <span class="top"><img class="icon" src="images/meowdoku-icon.png" alt="Meowdoku icon"><span class="idx">no. 06</span></span>
+        <h3>Meowdoku</h3>
+        <p class="meta" data-en="A cozy cat logic puzzle: place one cat in every row, column, and color region! 100 levels in 2 languages (Indonesian &amp; English)." data-id="Teka-teki logika kucing yang nyaman: tempatkan satu kucing di setiap baris, kolom, dan wilayah warna! 100 level dalam 2 bahasa (Indonesia &amp; Inggris).">A cozy cat logic puzzle: place one cat in every row, column, and color region! 100 levels in 2 languages (Indonesian &amp; English).</p>
+        <span class="pill" data-en="Closed Testing" data-id="Pengujian Tertutup">Closed Testing</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="auto">
   <div class="stats rv">
     <div class="stat"><div class="num">6</div><div class="lab" data-en="Games developed" data-id="Game dikembangkan">Games developed</div></div>
     <div class="stat"><div class="num">100</div><div class="lab" data-en="Levels per game" data-id="Level per game">Levels per game</div></div>
@@ -118,52 +120,56 @@
   </div>
 </section>
 
-<section style="padding-top:16px">
-  <div class="sec-head rv">
-    <span class="no">( 03 )</span>
-    <h2 data-en="Philosophy" data-id="Filosofi">Philosophy</h2>
-    <p data-en="Four rules taped above our drawing desk." data-id="Empat aturan yang tertempel di atas meja gambar kami.">Four rules taped above our drawing desk.</p>
-  </div>
-  <div class="phil">
-    <div class="phil-row rv"><span class="n">no.1</span><h3 data-en="Simple" data-id="Sederhana">Simple</h3><p data-en="Games don't have to be complex to entertain." data-id="Game tidak harus rumit untuk menghibur.">Games don't have to be complex to entertain.</p></div>
-    <div class="phil-row rv"><span class="n">no.2</span><h3 data-en="Artistic" data-id="Artistik">Artistic</h3><p data-en="Every stroke has meaning." data-id="Setiap goresan punya makna.">Every stroke has meaning.</p></div>
-    <div class="phil-row rv"><span class="n">no.3</span><h3 data-en="Handmade" data-id="Buatan Tangan">Handmade</h3><p data-en="Made by hand, not by machine." data-id="Dibuat dengan tangan, bukan mesin.">Made by hand, not by machine.</p></div>
-    <div class="phil-row rv"><span class="n">no.4</span><h3 data-en="Meaningful" data-id="Bermakna">Meaningful</h3><p data-en="Every game has a story." data-id="Setiap game punya cerita.">Every game has a story.</p></div>
+<section id="philosophy">
+  <div class="panel tilt-r narrow rv">
+    <div class="tape"></div>
+    <div class="sec-head">
+      <span class="no">( 03 )</span>
+      <h2 data-en="Philosophy" data-id="Filosofi">Philosophy</h2>
+      <p data-en="Four rules taped above our drawing desk." data-id="Empat aturan yang tertempel di atas meja gambar kami.">Four rules taped above our drawing desk.</p>
+    </div>
+    <div class="phil-row"><span class="n">no.1</span><h3 data-en="Simple" data-id="Sederhana">Simple</h3><p data-en="Games don't have to be complex to entertain." data-id="Game tidak harus rumit untuk menghibur.">Games don't have to be complex to entertain.</p></div>
+    <div class="phil-row"><span class="n">no.2</span><h3 data-en="Artistic" data-id="Artistik">Artistic</h3><p data-en="Every stroke has meaning." data-id="Setiap goresan punya makna.">Every stroke has meaning.</p></div>
+    <div class="phil-row"><span class="n">no.3</span><h3 data-en="Handmade" data-id="Buatan Tangan">Handmade</h3><p data-en="Made by hand, not by machine." data-id="Dibuat dengan tangan, bukan mesin.">Made by hand, not by machine.</p></div>
+    <div class="phil-row"><span class="n">no.4</span><h3 data-en="Meaningful" data-id="Bermakna">Meaningful</h3><p data-en="Every game has a story." data-id="Setiap game punya cerita.">Every game has a story.</p></div>
   </div>
 </section>
+</main>
 
 <footer id="contact">
-  <div class="foot-grid">
-    <div class="col">
-      <h4 data-en="Say hello" data-id="Sapa kami">Say hello</h4>
-      <a class="foot-mail" href="mailto:support@sketchdev.my.id">support@sketchdev.my.id</a>
+  <div class="panel foot-panel rv">
+    <div class="tape"></div>
+    <div class="foot-grid">
+      <div class="col">
+        <h4 data-en="Say hello" data-id="Sapa kami">Say hello</h4>
+        <a class="foot-mail" href="mailto:support@sketchdev.my.id">support@sketchdev.my.id</a>
+      </div>
+      <div class="col">
+        <h4 data-en="Follow" data-id="Ikuti">Follow</h4>
+        <a href="https://www.tiktok.com/@sketch.dev.studio" target="_blank" rel="noopener">TikTok</a>
+        <a href="https://www.instagram.com/sketch.dev.studio" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.youtube.com/@sketchdevstudio" target="_blank" rel="noopener">YouTube</a>
+      </div>
+      <div class="col">
+        <h4 data-en="Studio" data-id="Studio">Studio</h4>
+        <a href="https://play.google.com/store/apps/developer?id=Sketch+Dev+Studio" target="_blank" rel="noopener">Google Play</a>
+        <a href="privacy.html" data-en="Privacy Policy" data-id="Kebijakan Privasi">Privacy Policy</a>
+        <a href="terms.html" data-en="Terms of Service" data-id="Syarat Layanan">Terms of Service</a>
+        <a href="contact.html" data-en="Contact Page" data-id="Halaman Kontak">Contact Page</a>
+      </div>
     </div>
-    <div class="col">
-      <h4 data-en="Follow" data-id="Ikuti">Follow</h4>
-      <a href="https://www.tiktok.com/@sketch.dev.studio" target="_blank" rel="noopener">TikTok</a>
-      <a href="https://www.instagram.com/sketch.dev.studio" target="_blank" rel="noopener">Instagram</a>
-      <a href="https://www.youtube.com/@sketchdevstudio" target="_blank" rel="noopener">YouTube</a>
+    <div class="foot-mega" aria-hidden="true">Sketch Dev Studio</div>
+    <div class="foot-base">
+      <span>© 2026 Sketch Dev Studio</span>
+      <span data-en="Hand-drawn in Jakarta, Indonesia" data-id="Digambar dengan tangan di Jakarta, Indonesia">Hand-drawn in Jakarta, Indonesia</span>
     </div>
-    <div class="col">
-      <h4 data-en="Studio" data-id="Studio">Studio</h4>
-      <a href="https://play.google.com/store/apps/developer?id=Sketch+Dev+Studio" target="_blank" rel="noopener">Google Play</a>
-      <a href="privacy.html" data-en="Privacy Policy" data-id="Kebijakan Privasi">Privacy Policy</a>
-      <a href="terms.html" data-en="Terms of Service" data-id="Syarat Layanan">Terms of Service</a>
-      <a href="contact.html" data-en="Contact Page" data-id="Halaman Kontak">Contact Page</a>
-    </div>
-  </div>
-  <div class="foot-mega" aria-hidden="true">Sketch Dev Studio</div>
-  <div class="foot-base">
-    <span>© 2026 Sketch Dev Studio</span>
-    <span data-en="Hand-drawn in Jakarta, Indonesia" data-id="Digambar dengan tangan di Jakarta, Indonesia">Hand-drawn in Jakarta, Indonesia</span>
   </div>
 </footer>
 
 <script src="assets/site.js"></script>
-
 <script type="module">
-import { initHero3D } from './assets/hero3d.js';
-initHero3D({ variant: 'home' });
+import { initWorld } from './assets/world.js';
+initWorld({ variant: 'scroll' });
 </script>
 </body>
 </html>

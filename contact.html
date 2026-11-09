@@ -8,7 +8,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css">
 <script type="importmap">
 { "imports": {
@@ -18,6 +18,7 @@
 </script>
 </head>
 <body>
+<div id="scene" aria-hidden="true"></div>
 <nav>
   <a class="logo" href="index.html">SKETCH<em>DEV</em>STUDIO</a>
   <div class="links">
@@ -29,9 +30,8 @@
 </nav>
 
 <header class="subhero">
-  <div id="scene" aria-hidden="true"></div>
-  <div class="hero-shade"></div>
-  <div class="subhero-ui">
+  <div class="panel subhero-card">
+    <div class="tape"></div>
     <div class="hero-kicker"><b>●</b>&nbsp; <span data-en="Sketch Dev Studio — Say Hello" data-id="Sketch Dev Studio — Sapa Kami">Sketch Dev Studio — Say Hello</span></div>
     <h1 data-en="Contact Us" data-id="Hubungi Kami">Contact Us</h1>
     <p class="sub" data-en="Questions, feedback, or just want to say hi? We read everything." data-id="Pertanyaan, masukan, atau sekadar menyapa? Semua kami baca.">Questions, feedback, or just want to say hi? We read everything.</p>
@@ -39,6 +39,7 @@
 </header>
 
 <main class="doc">
+  <div class="doc-card">
 <div class="lang-section" id="lang-id">
 <h2>Hubungi Kami</h1>
     <p class="subtitle">Sketch Dev Studio — "Dari goresan, jadi game."</p>
@@ -381,32 +382,36 @@
       </div>
     </div>
 </div>
+  </div>
 </main>
 
 <footer id="contact">
-  <div class="foot-grid">
-    <div class="col">
-      <h4 data-en="Say hello" data-id="Sapa kami">Say hello</h4>
-      <a class="foot-mail" href="mailto:support@sketchdev.my.id">support@sketchdev.my.id</a>
+  <div class="panel foot-panel">
+    <div class="tape"></div>
+    <div class="foot-grid">
+      <div class="col">
+        <h4 data-en="Say hello" data-id="Sapa kami">Say hello</h4>
+        <a class="foot-mail" href="mailto:support@sketchdev.my.id">support@sketchdev.my.id</a>
+      </div>
+      <div class="col">
+        <h4 data-en="Follow" data-id="Ikuti">Follow</h4>
+        <a href="https://www.tiktok.com/@sketch.dev.studio" target="_blank" rel="noopener">TikTok</a>
+        <a href="https://www.instagram.com/sketch.dev.studio" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.youtube.com/@sketchdevstudio" target="_blank" rel="noopener">YouTube</a>
+      </div>
+      <div class="col">
+        <h4 data-en="Studio" data-id="Studio">Studio</h4>
+        <a href="https://play.google.com/store/apps/developer?id=Sketch+Dev+Studio" target="_blank" rel="noopener">Google Play</a>
+        <a href="privacy.html" data-en="Privacy Policy" data-id="Kebijakan Privasi">Privacy Policy</a>
+        <a href="terms.html" data-en="Terms of Service" data-id="Syarat Layanan">Terms of Service</a>
+        <a href="contact.html" data-en="Contact Page" data-id="Halaman Kontak">Contact Page</a>
+      </div>
     </div>
-    <div class="col">
-      <h4 data-en="Follow" data-id="Ikuti">Follow</h4>
-      <a href="https://www.tiktok.com/@sketch.dev.studio" target="_blank" rel="noopener">TikTok</a>
-      <a href="https://www.instagram.com/sketch.dev.studio" target="_blank" rel="noopener">Instagram</a>
-      <a href="https://www.youtube.com/@sketchdevstudio" target="_blank" rel="noopener">YouTube</a>
+    <div class="foot-mega" aria-hidden="true">Sketch Dev Studio</div>
+    <div class="foot-base">
+      <span>© 2026 Sketch Dev Studio</span>
+      <span data-en="Hand-drawn in Jakarta, Indonesia" data-id="Digambar dengan tangan di Jakarta, Indonesia">Hand-drawn in Jakarta, Indonesia</span>
     </div>
-    <div class="col">
-      <h4 data-en="Studio" data-id="Studio">Studio</h4>
-      <a href="https://play.google.com/store/apps/developer?id=Sketch+Dev+Studio" target="_blank" rel="noopener">Google Play</a>
-      <a href="privacy.html" data-en="Privacy Policy" data-id="Kebijakan Privasi">Privacy Policy</a>
-      <a href="terms.html" data-en="Terms of Service" data-id="Syarat Layanan">Terms of Service</a>
-      <a href="contact.html" data-en="Contact Page" data-id="Halaman Kontak">Contact Page</a>
-    </div>
-  </div>
-  <div class="foot-mega" aria-hidden="true">Sketch Dev Studio</div>
-  <div class="foot-base">
-    <span>© 2026 Sketch Dev Studio</span>
-    <span data-en="Hand-drawn in Jakarta, Indonesia" data-id="Digambar dengan tangan di Jakarta, Indonesia">Hand-drawn in Jakarta, Indonesia</span>
   </div>
 </footer>
 
@@ -438,8 +443,8 @@
   }
 </script>
 <script type="module">
-import { initHero3D } from './assets/hero3d.js';
-initHero3D({ variant: 'contact' });
+import { initWorld } from './assets/world.js';
+initWorld({ variant: 'parked' });
 </script>
 </body>
 </html>

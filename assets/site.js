@@ -13,6 +13,10 @@
     en: 'We believe a game does not need <span class="hl">explosions</span> to be unforgettable. Ours begin on <span class="un">paper</span> — one pencil sketch at a time — and grow into worlds you can finish, master, and replay. <span class="hl">Small games, drawn slowly, played everywhere.</span>',
     id: 'Kami percaya game tidak butuh <span class="hl">ledakan</span> untuk tak terlupakan. Game kami berawal di atas <span class="un">kertas</span> — satu sketsa pensil demi satu — lalu tumbuh jadi dunia yang bisa kamu tamatkan, kuasai, dan mainkan lagi. <span class="hl">Game kecil, digambar perlahan, dimainkan di mana saja.</span>'
   };
+  var HERO_H1 = {
+    en: 'Hand-drawn <span class="amber">games</span>,<br>drawn slowly —<br>played <span class="terra">everywhere</span>.',
+    id: 'Game <span class="amber">gambar tangan</span>,<br>digambar perlahan —<br>dimainkan <span class="terra">di mana saja</span>.'
+  };
   var lang = localStorage.getItem('studio-lang') || 'en';
 
   function applyLang(l) {
@@ -26,6 +30,9 @@
     /* Manifesto keeps its highlight markup */
     var m = document.querySelector('.manifesto');
     if (m && MANI[l]) m.innerHTML = MANI[l];
+    /* Hero headline keeps its colour spans */
+    var h1 = document.querySelector('.hero h1');
+    if (h1 && HERO_H1[l]) h1.innerHTML = HERO_H1[l];
     /* Section-driven pages (contact / privacy / terms) */
     var idS = document.getElementById('lang-id');
     var enS = document.getElementById('lang-en');
