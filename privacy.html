@@ -1,510 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Privacy Policy — Sketch Dev Studio</title>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<style>
-  /* ============================================
-     VARIABEL WARNA — MODE TERANG (default)
-     ============================================ */
-  :root {
-    --bg-outer: #b8b8b8;
-    --bg-outer-stripe: #b0b0b0;
-    --paper: #ffffff;
-    --paper-line: #c8c8c8;
-    --paper-margin: #9a9a9a;
-    --paper-hole: #8a8a8a;
-    --paper-hole-ring: #c0c0c0;
-    --text: #1a1a1a;
-    --text-soft: #555555;
-    --text-faint: #666666;
-    --line: #1a1a1a;
-    --note-bg: #f0f0f0;
-    --note-border: #1a1a1a;
-    --highlight: #d8d8d8;
-    --shadow-1: rgba(0,0,0,0.2);
-    --shadow-2: rgba(0,0,0,0.25);
-    --shadow-3: rgba(0,0,0,0.15);
-    --btn-bg: #1a1a1a;
-    --btn-text: #ffffff;
-    --btn-shadow: rgba(0,0,0,0.35);
-  }
-
-  /* ============================================
-     MODE GELAP
-     ============================================ */
-  body.dark {
-    --bg-outer: #2a2a2a;
-    --bg-outer-stripe: #232323;
-    --paper: #1a1a1a;
-    --paper-line: #333333;
-    --paper-margin: #555555;
-    --paper-hole: #444444;
-    --paper-hole-ring: #2a2a2a;
-    --text: #e8e8e8;
-    --text-soft: #aaaaaa;
-    --text-faint: #888888;
-    --line: #e8e8e8;
-    --note-bg: #252525;
-    --note-border: #e8e8e8;
-    --highlight: #3a3a3a;
-    --shadow-1: rgba(0,0,0,0.5);
-    --shadow-2: rgba(0,0,0,0.6);
-    --shadow-3: rgba(0,0,0,0.4);
-    --btn-bg: #e8e8e8;
-    --btn-text: #1a1a1a;
-    --btn-shadow: rgba(0,0,0,0.6);
-  }
-
-  /* ===== RESET ===== */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  /* ===== BODY ===== */
-  body {
-    font-family: 'Nunito', 'Segoe UI', Arial, sans-serif;
-    background: var(--bg-outer);
-    background-image:
-      repeating-linear-gradient(
-        45deg,
-        var(--bg-outer-stripe) 0px,
-        var(--bg-outer-stripe) 2px,
-        var(--bg-outer) 2px,
-        var(--bg-outer) 6px
-      );
-    padding: 50px 20px 100px;
-    color: var(--text);
-    line-height: 1.9;
-    min-height: 100vh;
-    transition: background 0.4s ease, color 0.4s ease;
-  }
-
-  /* ============================================
-     KONTROL ATAS (toggle bahasa & mode)
-     ============================================ */
-  .controls {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    display: flex;
-    gap: 10px;
-    z-index: 100;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-  }
-
-  .control-btn {
-    font-family: 'Nunito', 'Segoe UI', Arial, sans-serif;
-    font-weight: 700;
-    font-size: 1.1rem;
-    font-weight: 700;
-    padding: 8px 16px;
-    background: var(--btn-bg);
-    color: var(--btn-text);
-    border: 2px solid var(--btn-bg);
-    border-radius: 6px;
-    cursor: pointer;
-    box-shadow: 2px 3px 0 var(--btn-shadow);
-    transition: transform 0.15s, background 0.3s, color 0.3s;
-    letter-spacing: 0.5px;
-  }
-
-  .control-btn:hover {
-    transform: translateY(-2px);
-  }
-
-  .control-btn:active {
-    transform: translateY(0);
-    box-shadow: 1px 1px 0 var(--btn-shadow);
-  }
-
-  /* ============================================
-     KERTAS BUKU TULIS
-     ============================================ */
-  .paper {
-    max-width: 850px;
-    margin: 0 auto;
-    background: var(--paper);
-    background-image:
-      repeating-linear-gradient(
-        to bottom,
-        transparent 0px,
-        transparent 31px,
-        var(--paper-line) 31px,
-        var(--paper-line) 32px
-      );
-    padding: 70px 70px 70px 95px;
-    position: relative;
-    box-shadow:
-      0 2px 4px var(--shadow-1),
-      0 10px 25px var(--shadow-2),
-      0 25px 50px var(--shadow-3);
-    border-radius: 2px;
-    transform: rotate(-0.2deg);
-    transition: background 0.4s ease, box-shadow 0.4s ease;
-  }
-
-  /* garis margin vertikal */
-  .paper::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 65px;
-    width: 2px;
-    background: var(--paper-margin);
-    opacity: 0.7;
-  }
-
-  /* 3 lubang buku tulis */
-  .paper::after {
-    content: '';
-    position: absolute;
-    left: 25px;
-    top: 0;
-    bottom: 0;
-    width: 20px;
-    background-image:
-      radial-gradient(circle, var(--paper-hole) 7px, var(--paper-hole-ring) 8px, transparent 9px),
-      radial-gradient(circle, var(--paper-hole) 7px, var(--paper-hole-ring) 8px, transparent 9px),
-      radial-gradient(circle, var(--paper-hole) 7px, var(--paper-hole-ring) 8px, transparent 9px);
-    background-size: 20px 20px;
-    background-repeat: no-repeat;
-    background-position: center 15%, center 50%, center 85%;
-  }
-
-  /* ============================================
-     JUDUL
-     ============================================ */
-  h1 {
-    font-family: 'Caveat', cursive;
-    font-size: 3.4rem;
-    font-weight: 700;
-    color: var(--text);
-    text-align: center;
-    margin-bottom: 5px;
-    letter-spacing: 1px;
-    display: block;
-    width: 100%;
-  }
-
-  h1::after {
-    content: '';
-    display: block;
-    width: 240px;
-    height: 2px;
-    background: var(--line);
-    margin: 12px auto 0;
-    transform: rotate(-0.6deg);
-    opacity: 0.85;
-  }
-
-  .subtitle {
-    text-align: center;
-    font-size: 1.35rem;
-    color: var(--text-soft);
-    margin-bottom: 50px;
-    font-style: italic;
-  }
-
-  /* ============================================
-     PEMISAH
-     ============================================ */
-  .sketch-divider {
-    height: 18px;
-    margin: 40px 0;
-    position: relative;
-  }
-
-  .sketch-divider::before {
-    content: '';
-    position: absolute;
-    top: 50%; left: 0; right: 0;
-    height: 1.5px;
-    background: var(--line);
-    opacity: 0.65;
-    transform: rotate(0.3deg);
-  }
-
-  .sketch-divider::after {
-    content: '';
-    position: absolute;
-    top: calc(50% - 3px); left: 3%; right: 3%;
-    height: 1px;
-    background: var(--line);
-    opacity: 0.4;
-    transform: rotate(-0.5deg);
-  }
-
-  /* ============================================
-     HEADING
-     ============================================ */
-  h2 {
-    font-family: 'Nunito', 'Segoe UI', Arial, sans-serif;
-    font-weight: 800;
-    font-size: 2.1rem;
-    font-weight: 700;
-    color: var(--text);
-    margin: 38px 0 14px;
-    position: relative;
-    padding-left: 30px;
-    display: block;
-  }
-
-  h2::before {
-    content: '✏';
-    position: absolute;
-    left: 0;
-    top: 2px;
-    font-size: 1.3rem;
-    opacity: 0.85;
-  }
-
-  h2::after {
-    content: '';
-    display: block;
-    width: 100%;
-    height: 1.5px;
-    background: var(--line);
-    margin-top: 6px;
-    opacity: 0.55;
-    transform: rotate(0.2deg);
-  }
-
-  /* ============================================
-     PARAGRAF & LIST
-     ============================================ */
-  p {
-    font-size: 1.2rem;
-    margin-bottom: 16px;
-    color: var(--text);
-    text-align: justify;
-  }
-
-  ul, ol {
-    margin: 12px 0 22px 35px;
-    font-size: 1.2rem;
-  }
-
-  li {
-    margin-bottom: 9px;
-    position: relative;
-    color: var(--text);
-  }
-
-  ul li::marker {
-    color: var(--text);
-  }
-
-  /* ============================================
-     KOTAK CATATAN
-     ============================================ */
-  .note {
-    background: var(--note-bg);
-    border: 2px dashed var(--note-border);
-    border-radius: 6px;
-    padding: 22px 28px;
-    margin: 28px 0;
-    position: relative;
-    transform: rotate(-0.4deg);
-    box-shadow: 2px 3px 0 var(--shadow-1);
-    transition: background 0.4s ease, border-color 0.4s ease;
-  }
-
-  .note::before {
-    content: '📌';
-    position: absolute;
-    top: -16px;
-    left: 22px;
-    font-size: 1.5rem;
-    transform: rotate(-15deg);
-    filter: grayscale(100%);
-  }
-
-  .note strong {
-    font-size: 1.25rem;
-    display: block;
-    margin-bottom: 10px;
-    color: var(--text);
-  }
-
-  /* ============================================
-     HIGHLIGHT
-     ============================================ */
-  .highlight {
-    background: var(--highlight);
-    padding: 1px 5px;
-    font-weight: 700;
-    border-radius: 2px;
-    color: var(--text);
-    transition: background 0.4s ease;
-  }
-
-  /* ============================================
-     FOOTER
-     ============================================ */
-  .footer {
-    margin-top: 55px;
-    padding-top: 28px;
-    border-top: 2px dashed var(--line);
-    text-align: center;
-    font-size: 1.15rem;
-    color: var(--text-soft);
-  }
-
-
-  .footer-links {
-    margin-top: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px 22px;
-    font-size: 1.1rem;
-  }
-
-  .footer-links a {
-    color: var(--text-soft);
-    text-decoration: none;
-    border-bottom: 1px dashed var(--text-soft);
-    transition: color 0.2s;
-  }
-
-  .footer-links a:hover {
-    color: var(--text);
-  }
-  .social-links {
-    margin-top: 16px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-  }
-
-  .social-links a {
-    color: var(--text-soft);
-    text-decoration: none;
-    border: 1.5px dashed var(--line);
-    border-radius: 999px;
-    padding: 4px 18px;
-    font-size: 1.05rem;
-    transition: color 0.2s, border-color 0.2s;
-  }
-
-  .social-links a:hover {
-    color: var(--text);
-    border-style: solid;
-  }
-
-
-  .signature {
-    font-family: 'Caveat', cursive;
-    font-size: 1.8rem;
-    color: var(--text);
-    margin-top: 22px;
-    transform: rotate(-2deg);
-    display: inline-block;
-  }
-
-  /* ============================================
-     TOMBOL BACK TO TOP
-     ============================================ */
-  .back-top {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background: var(--btn-bg);
-    color: var(--btn-text);
-    border: 2px solid var(--btn-bg);
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    font-size: 1.6rem;
-    cursor: pointer;
-    box-shadow: 3px 4px 0 var(--btn-shadow);
-    transition: transform 0.2s, background 0.3s, color 0.3s;
-    font-family: 'Nunito', 'Segoe UI', Arial, sans-serif;
-    font-weight: 700;
-    z-index: 100;
-  }
-
-  .back-top:hover {
-    transform: translateY(-3px) rotate(-5deg);
-    background: var(--paper);
-    color: var(--text);
-  }
-
-  /* ============================================
-     BAHASA — SEMBUNYIKAN / TAMPILKAN
-     ============================================ */
-  .lang-section { display: none; }
-  .lang-section.active { display: block; }
-
-  /* ============================================
-     RESPONSIVE
-     ============================================ */
-  @media (max-width: 600px) {
-    .paper {
-      padding: 40px 25px 50px 60px;
-      transform: none;
-    }
-    .paper::before { left: 40px; }
-    .paper::after { left: 12px; }
-    h1 { font-size: 2.3rem; }
-    h2 { font-size: 1.65rem; padding-left: 25px; }
-    h2::before { font-size: 1.05rem; }
-    p, li { font-size: 1.08rem; }
-    body { padding: 15px 10px 90px; }
-    .controls {
-      top: 10px;
-      right: 10px;
-      gap: 6px;
-    }
-    .control-btn {
-      font-size: 0.95rem;
-      padding: 6px 10px;
-    }
-  }
-
-  /* ============================================
-     ANIMASI TULIS
-     ============================================ */
-  @keyframes writeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .paper > * {
-    animation: writeIn 0.6s ease-out both;
-  }
-</style>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<script type="importmap">
+{ "imports": {
+  "three": "./vendor/three.module.min.js",
+  "three/addons/": "./vendor/addons/"
+} }
+</script>
 </head>
 <body>
+<nav>
+  <a class="logo" href="index.html">SKETCH<em>DEV</em>STUDIO</a>
+  <div class="links">
+    <a href="index.html#games" data-en="Games" data-id="Game">Games</a>
+    <a href="index.html#about" data-en="About" data-id="Tentang">About</a>
+    <a href="contact.html" class="keep" data-en="Contact" data-id="Kontak">Contact</a>
+    <button id="langBtn" title="Switch language">ID</button>
+  </div>
+</nav>
 
-<!-- ============================================
-     KONTROL ATAS
-     ============================================ -->
-<div class="controls">
-  <button class="control-btn" id="langBtn" onclick="toggleLang()">🇮🇩 Indonesia</button>
-  <button class="control-btn" id="modeBtn" onclick="toggleMode()">🌙 Gelap</button>
-</div>
+<header class="subhero">
+  <div id="scene" aria-hidden="true"></div>
+  <div class="hero-shade"></div>
+  <div class="subhero-ui">
+    <div class="hero-kicker"><b>●</b>&nbsp; <span data-en="Sketch Dev Studio — Legal" data-id="Sketch Dev Studio — Legal">Sketch Dev Studio — Legal</span></div>
+    <h1 data-en="Privacy Policy" data-id="Kebijakan Privasi">Privacy Policy</h1>
+    <p class="sub" data-en="How we handle your data in our games and on this website." data-id="Bagaimana kami menangani data Anda di game kami dan situs web ini.">How we handle your data in our games and on this website.</p>
+  </div>
+</header>
 
-
-<div class="paper">
-
-  <!-- ============================================
-       BAGIAN BAHASA INDONESIA
-       ============================================ -->
-  <div class="lang-section" id="lang-id">
-
-    <h1>Kebijakan Privasi</h1>
+<main class="doc">
+<div class="lang-section" id="lang-id">
+<h2>Kebijakan Privasi</h1>
     <p class="subtitle">Sketch Dev Studio — "Dari goresan, jadi game."</p>
 
     <div class="note">
@@ -641,16 +177,9 @@
         <a href="https://play.google.com/store/apps/developer?id=Sketch+Dev+Studio" target="_blank" rel="noopener">Google Play</a>
       </div>
     </div>
-
-  </div>
-
-
-  <!-- ============================================
-       BAGIAN BAHASA INGGRIS
-       ============================================ -->
-  <div class="lang-section active" id="lang-en">
-
-    <h1>Privacy Policy</h1>
+</div>
+<div class="lang-section active" id="lang-en">
+<h2>Privacy Policy</h1>
     <p class="subtitle">Sketch Dev Studio — "From sketch, to game."</p>
 
     <div class="note">
@@ -786,86 +315,41 @@
         <a href="https://play.google.com/store/apps/developer?id=Sketch+Dev+Studio" target="_blank" rel="noopener">Google Play</a>
       </div>
     </div>
-
-  </div>
-
 </div>
+</main>
 
-<button class="back-top" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑</button>
+<footer id="contact">
+  <div class="foot-grid">
+    <div class="col">
+      <h4 data-en="Say hello" data-id="Sapa kami">Say hello</h4>
+      <a class="foot-mail" href="mailto:support@sketchdev.my.id">support@sketchdev.my.id</a>
+    </div>
+    <div class="col">
+      <h4 data-en="Follow" data-id="Ikuti">Follow</h4>
+      <a href="https://www.tiktok.com/@sketch.dev.studio" target="_blank" rel="noopener">TikTok</a>
+      <a href="https://www.instagram.com/sketch.dev.studio" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.youtube.com/@sketchdevstudio" target="_blank" rel="noopener">YouTube</a>
+    </div>
+    <div class="col">
+      <h4 data-en="Studio" data-id="Studio">Studio</h4>
+      <a href="https://play.google.com/store/apps/developer?id=Sketch+Dev+Studio" target="_blank" rel="noopener">Google Play</a>
+      <a href="privacy.html" data-en="Privacy Policy" data-id="Kebijakan Privasi">Privacy Policy</a>
+      <a href="terms.html" data-en="Terms of Service" data-id="Syarat Layanan">Terms of Service</a>
+      <a href="contact.html" data-en="Contact Page" data-id="Halaman Kontak">Contact Page</a>
+    </div>
+  </div>
+  <div class="foot-mega" aria-hidden="true">Sketch Dev Studio</div>
+  <div class="foot-base">
+    <span>© 2026 Sketch Dev Studio</span>
+    <span data-en="Hand-drawn in Jakarta, Indonesia" data-id="Digambar dengan tangan di Jakarta, Indonesia">Hand-drawn in Jakarta, Indonesia</span>
+  </div>
+</footer>
 
-<script>
-  /* ============================================
-     TOGGLE BAHASA
-     ============================================ */
-  let currentLang = 'en';
+<script src="assets/site.js"></script>
 
-  function toggleLang() {
-    const idSection = document.getElementById('lang-id');
-    const enSection = document.getElementById('lang-en');
-    const btn = document.getElementById('langBtn');
-
-    if (currentLang === 'id') {
-      idSection.classList.remove('active');
-      enSection.classList.add('active');
-      btn.textContent = '🇮🇩 Indonesia';
-      document.documentElement.lang = 'en';
-      currentLang = 'en';
-    } else {
-      enSection.classList.remove('active');
-      idSection.classList.add('active');
-      btn.textContent = '🇬🇧 English';
-      document.documentElement.lang = 'id';
-      currentLang = 'id';
-    }
-  }
-
-  /* ============================================
-     TOGGLE MODE GELAP / TERANG
-     ============================================ */
-  let currentMode = 'light';
-
-  function toggleMode() {
-    const btn = document.getElementById('modeBtn');
-    document.body.classList.toggle('dark');
-
-    if (currentMode === 'light') {
-      btn.textContent = '☀️ Terang';
-      currentMode = 'dark';
-      localStorage.setItem('privacy-mode', 'dark');
-    } else {
-      btn.textContent = '🌙 Gelap';
-      currentMode = 'light';
-      localStorage.setItem('privacy-mode', 'light');
-    }
-  }
-
-  /* ============================================
-     SIMPAN PREFERENSI DI LOCALSTORAGE
-     ============================================ */
-  window.addEventListener('DOMContentLoaded', () => {
-    const savedMode = localStorage.getItem('privacy-mode');
-    const savedLang = localStorage.getItem('privacy-lang');
-
-    // mode
-    if (savedMode === 'dark') {
-      document.body.classList.add('dark');
-      document.getElementById('modeBtn').textContent = '☀️ Terang';
-      currentMode = 'dark';
-    }
-
-    // bahasa
-    if (savedLang === 'id') {
-      toggleLang();
-    }
-  });
-
-  // simpan bahasa saat diganti
-  const originalToggleLang = toggleLang;
-  toggleLang = function() {
-    originalToggleLang();
-    localStorage.setItem('privacy-lang', currentLang);
-  };
+<script type="module">
+import { initHero3D } from './assets/hero3d.js';
+initHero3D({ variant: 'legal' });
 </script>
-
 </body>
 </html>
