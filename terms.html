@@ -8,17 +8,14 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400&family=Baloo+2:wght@600;700;800&family=Caveat:wght@600;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css">
-<script type="importmap">
-{ "imports": {
-  "three": "./vendor/three.module.min.js",
-  "three/addons/": "./vendor/addons/"
-} }
-</script>
 </head>
 <body>
-<div id="scene" aria-hidden="true"></div>
+<div id="stars" aria-hidden="true"></div>
+<div class="moon" aria-hidden="true"></div>
+<div class="cloud" aria-hidden="true" style="top:16%;width:420px;height:120px;animation-duration:95s"></div>
+<div class="comet" aria-hidden="true"></div>
 <nav>
   <a class="logo" href="index.html">SKETCH<em>DEV</em>STUDIO</a>
   <div class="links">
@@ -452,9 +449,5 @@
 
 <script src="assets/site.js"></script>
 
-<script type="module">
-import { initWorld } from './assets/world.js';
-initWorld({ variant: 'parked' });
-</script>
 </body>
 </html>

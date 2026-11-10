@@ -1,5 +1,19 @@
-/* Sketch Dev Studio — shared site behaviour: marquee, language, reveal. */
+/* Sketch Dev Studio — shared site behaviour: starfield, marquee, language, reveal. */
 (function () {
+  /* ---------- Starfield (night sky) ---------- */
+  var sky = document.getElementById('stars');
+  if (sky) {
+    var html = '';
+    for (var i = 0; i < 110; i++) {
+      var s = (Math.random() * 1.9 + .7).toFixed(1);
+      html += '<span class="star" style="left:' + (Math.random() * 100).toFixed(2) + '%;top:'
+        + (Math.random() * 100).toFixed(2) + '%;width:' + s + 'px;height:' + s + 'px;--d:'
+        + (Math.random() * 3.4 + 2.2).toFixed(2) + 's;animation-delay:-'
+        + (Math.random() * 4).toFixed(2) + 's"></span>';
+    }
+    sky.innerHTML = html;
+  }
+
   /* ---------- Marquee (home) ---------- */
   var mq = document.getElementById('mqTrack');
   if (mq) {
