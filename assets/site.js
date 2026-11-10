@@ -26,6 +26,49 @@
     });
   }
 
+  /* ---------- Preloader (tampil singkat; dilewati pada kunjungan ulang satu sesi) ---------- */
+  var loader = document.getElementById('loader');
+  if (loader) {
+    var hideLoader = function () { loader.classList.add('done'); };
+    if (sessionStorage.getItem('sds-seen')) {
+      hideLoader();
+    } else {
+      sessionStorage.setItem('sds-seen', '1');
+      var ldStart = performance.now();
+      window.addEventListener('load', function () {
+        var wait = Math.max(0, 620 - (performance.now() - ldStart));
+        setTimeout(hideLoader, wait);
+      });
+      setTimeout(hideLoader, 1500);
+    }
+  }
+
+  /* ---------- Kursor kustom emas (hanya pointer halus) ---------- */
+  var finePointer = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+  if (finePointer && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('has-cursor');
+    var cDot = document.getElementById('cursorDot');
+    var cRing = document.getElementById('cursorRing');
+    if (cDot && cRing) {
+      var mx = -100, my = -100, rx = -100, ry = -100;
+      window.addEventListener('pointermove', function (e) {
+        mx = e.clientX; my = e.clientY;
+        cDot.style.transform = 'translate(' + mx + 'px,' + my + 'px)';
+      }, { passive: true });
+      (function cursorLoop() {
+        requestAnimationFrame(cursorLoop);
+        rx += (mx - rx) * 0.16; ry += (my - ry) * 0.16;
+        cRing.style.transform = 'translate(' + rx.toFixed(1) + 'px,' + ry.toFixed(1) + 'px)';
+      })();
+      document.addEventListener('mouseover', function (e) {
+        if (e.target.closest && e.target.closest('a, button')) cRing.classList.add('grow');
+      });
+      document.addEventListener('mouseout', function (e) {
+        if (e.target.closest && e.target.closest('a, button')) cRing.classList.remove('grow');
+      });
+    }
+  }
+
   /* ---------- Langit mengikuti mouse (parallax 3D + cahaya + sparkle) ---------- */
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!reduceMotion && starLayers.length) {
@@ -204,6 +247,9 @@
       fillMarquee();
       bindReveals();
       markActive();
+      if (window.__worldSetVariant) {
+        window.__worldSetVariant(location.pathname === '/' ? 'home' : 'parked');
+      }
       if (hash) {
         var target = document.querySelector(hash);
         if (target) { target.scrollIntoView(); return; }
