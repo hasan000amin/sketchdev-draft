@@ -149,12 +149,12 @@
 
   /* ---------- Language (EN default; saved choice in localStorage 'studio-lang') ---------- */
   var MANI = {
-    en: 'We believe a game does not need <span class="hl">explosions</span> to be unforgettable. Ours begin on <span class="un">paper</span>, one pencil sketch at a time, and grow into worlds you can finish, master, and replay. <span class="hl">Small games, drawn slowly, played everywhere.</span>',
-    id: 'Kami percaya game tidak butuh <span class="hl">ledakan</span> untuk tak terlupakan. Game kami berawal di atas <span class="un">kertas</span>, satu sketsa pensil demi satu, lalu tumbuh jadi dunia yang bisa kamu tamatkan, kuasai, dan mainkan lagi. <span class="hl">Game kecil, digambar perlahan, dimainkan di mana saja.</span>'
+    en: 'Our games start as pencil sketches on <span class="un">paper</span>. We keep them <span class="hl">small and focused</span>: games you can finish, master, and replay.',
+    id: 'Game kami berawal dari sketsa pensil di atas <span class="un">kertas</span>. Kami membuatnya <span class="hl">kecil dan fokus</span>: game yang bisa ditamatkan, dikuasai, dan dimainkan lagi.'
   };
   var HERO_H1 = {
-    en: 'Hand-drawn <span class="amber">games</span>,<br>drawn slowly,<br>played <span class="terra">everywhere</span>.',
-    id: 'Game <span class="amber">gambar tangan</span>,<br>digambar perlahan,<br>dimainkan <span class="terra">di mana saja</span>.'
+    en: 'Hand-drawn <span class="amber">games</span>,<br>made in Jakarta.',
+    id: 'Game <span class="amber">gambar tangan</span>,<br>dibuat di Jakarta.'
   };
   var lang = localStorage.getItem('studio-lang') || 'en';
 
