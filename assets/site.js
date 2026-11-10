@@ -140,7 +140,7 @@
   function fillMarquee() {
     var mq = document.getElementById('mqTrack');
     if (mq) {
-      var words = ['Hand-Drawn Games', '100 Levels', 'English × Indonesia', 'Sketch Dev Studio', 'Made in Jakarta'];
+      var words = ['Mobile Games', '100 Levels', 'English × Indonesia', 'Sketch Dev Studio', 'Indie Studio'];
       var half = words.map(function (w) { return w + '<i>•</i>'; }).join('');
       mq.innerHTML = half + half;
     }
@@ -149,12 +149,12 @@
 
   /* ---------- Language (EN default; saved choice in localStorage 'studio-lang') ---------- */
   var MANI = {
-    en: 'Our games start as pencil sketches on <span class="un">paper</span>. We keep them <span class="hl">small and focused</span>: games you can finish, master, and replay.',
-    id: 'Game kami berawal dari sketsa pensil di atas <span class="un">kertas</span>. Kami membuatnya <span class="hl">kecil dan fokus</span>: game yang bisa ditamatkan, dikuasai, dan dimainkan lagi.'
+    en: 'We make <span class="hl">small, focused</span> games: games you can finish, master, and replay.',
+    id: 'Kami membuat game yang <span class="hl">kecil dan fokus</span>: game yang bisa ditamatkan, dikuasai, dan dimainkan lagi.'
   };
   var HERO_H1 = {
-    en: 'Hand-drawn <span class="amber">games</span>,<br>made in Jakarta.',
-    id: 'Game <span class="amber">gambar tangan</span>,<br>dibuat di Jakarta.'
+    en: 'We make <span class="amber">mobile games</span>.',
+    id: 'Kami membuat <span class="amber">game mobile</span>.'
   };
   var lang = localStorage.getItem('studio-lang') || 'en';
 
