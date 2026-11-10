@@ -146,7 +146,9 @@ export function initWorld({ variant = 'home' } = {}) {
   const iconGroup = new THREE.Group(); scene.add(iconGroup);
   const iconMeshes = [];
   const texLoader = new THREE.TextureLoader();
-  GAMES.forEach((src, i) => {
+  /* Ikon panggung WebGL dimatikan: digantikan carousel coverflow DOM di hero. */
+  const SHOW_ICONS = false;
+  if (SHOW_ICONS) GAMES.forEach((src, i) => {
     const g = new THREE.Group();
     const back = new THREE.Mesh(
       new THREE.PlaneGeometry(2.78, 2.78),

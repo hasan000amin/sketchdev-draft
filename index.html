@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400&family=Baloo+2:wght@600;700;800&family=Caveat:wght@600;700&family=Fredoka:wght@500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=9">
+<link rel="stylesheet" href="/assets/site.css?v=10">
 <script type="importmap">
 { "imports": { "three": "/vendor/three.module.min.js" } }
 </script>
@@ -64,10 +64,25 @@
   </div>
 
 
-  <div class="stage3d" aria-hidden="true">
+  <div class="stage3d">
+    <div class="coverflow" id="coverflow" tabindex="0" aria-label="Game showcase">
+      <div class="cf-track" id="cfTrack">
+      <a class="cf-slide" href="https://play.google.com/store/apps/details?id=id.my.sketchdev.letterrain" target="_blank" rel="noopener" data-name="Letter Rain" data-sub-en="Live on Google Play" data-sub-id="Sudah tayang di Google Play"><img src="/images/letter-rain-icon.png" alt="Letter Rain"></a>
+      <a class="cf-slide" href="/games" data-name="Letter Snake" data-sub-en="Closed testing" data-sub-id="Pengujian tertutup"><img src="/images/letter-snake-icon.png" alt="Letter Snake"></a>
+      <a class="cf-slide" href="/games" data-name="Numerik Crisis" data-sub-en="Closed testing" data-sub-id="Pengujian tertutup"><img src="/images/numerik-crisis-icon.png" alt="Numerik Crisis"></a>
+      <a class="cf-slide" href="/games" data-name="Number Rain" data-sub-en="Closed testing" data-sub-id="Pengujian tertutup"><img src="/images/number-rain-icon.png" alt="Number Rain"></a>
+      <a class="cf-slide" href="/games" data-name="Number Snake" data-sub-en="Closed testing" data-sub-id="Pengujian tertutup"><img src="/images/number-snake-icon.png" alt="Number Snake"></a>
+      <a class="cf-slide" href="/games" data-name="Meowdoku" data-sub-en="Closed testing" data-sub-id="Pengujian tertutup"><img src="/images/meowdoku-icon.png" alt="Meowdoku"></a>
+      </div>
+      <div class="cf-ui">
+        <div class="cf-name" id="cfName">Letter Rain</div>
+        <div class="cf-sub" id="cfSub">Live on Google Play</div>
+        <div class="cf-dots" id="cfDots"></div>
+      </div>
+    </div>
     <div class="stage-cap">
       <span class="stage-kick" data-en="Our games" data-id="Game kami">Our games</span>
-      <span class="stage-hint" data-en="Move your cursor and the planes will follow" data-id="Gerakkan kursor dan pesawatnya akan mengikuti">Move your cursor and the planes will follow</span>
+      <span class="stage-hint" data-en="Drag or swipe to browse the shelf" data-id="Seret atau geser untuk melihat koleksinya">Drag or swipe to browse the shelf</span>
     </div>
   </div>
   <div class="panel hero-card">
@@ -168,9 +183,9 @@
     <span class="lang-pills"><button type="button" class="lpill" data-l="en">EN</button><button type="button" class="lpill" data-l="id">ID</button></span>
   </div>
 </div>
-<script src="/assets/site.js?v=7"></script>
+<script src="/assets/site.js?v=8"></script>
 <script type="module">
-import { initWorld } from '/assets/world.js?v=5';
+import { initWorld } from '/assets/world.js?v=6';
 const w = initWorld({ variant: 'home' });
 if (w) window.__worldSetVariant = w.setVariant;
 </script>

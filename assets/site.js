@@ -182,6 +182,7 @@
     var btn = document.getElementById('langBtn');
     if (btn) btn.textContent = l === 'en' ? 'ID' : 'EN';
     localStorage.setItem('studio-lang', l);
+    if (window.__cfCaption) window.__cfCaption();
   }
 
   var btn = document.getElementById('langBtn');
@@ -342,4 +343,110 @@
 
     markActive();
   }
+
+  /* ---------- Coverflow hero (album geser) ---------- */
+  (function () {
+    var root = document.getElementById('coverflow');
+    if (!root) return;
+    var track = document.getElementById('cfTrack');
+    var slides = Array.prototype.slice.call(track.querySelectorAll('.cf-slide'));
+    var nameEl = document.getElementById('cfName');
+    var subEl = document.getElementById('cfSub');
+    var dotsWrap = document.getElementById('cfDots');
+    var n = slides.length;
+    var pos = 0, target = 0, lastTouch = 0, lastAuto = 0, dir = 1;
+    var dots = slides.map(function (s, i) {
+      var d = document.createElement('button');
+      d.type = 'button';
+      d.className = 'cf-dot' + (i === 0 ? ' on' : '');
+      d.setAttribute('aria-label', s.getAttribute('data-name'));
+      d.addEventListener('click', function () { goTo(i); poke(); });
+      dotsWrap.appendChild(d);
+      return d;
+    });
+    function curLang() { return document.documentElement.lang === 'id' ? 'id' : 'en'; }
+    function caption() {
+      var i = Math.max(0, Math.min(n - 1, Math.round(target)));
+      var s = slides[i];
+      if (nameEl) nameEl.textContent = s.getAttribute('data-name');
+      if (subEl) subEl.textContent = s.getAttribute(curLang() === 'id' ? 'data-sub-id' : 'data-sub-en');
+      dots.forEach(function (d, j) { d.classList.toggle('on', j === i); });
+    }
+    window.__cfCaption = caption;
+    function goTo(i) { target = Math.max(0, Math.min(n - 1, i)); caption(); }
+    function poke() { lastTouch = performance.now(); }
+    function render() {
+      var size = slides[0].offsetWidth || 200;
+      var spacing = size * 0.62;
+      slides.forEach(function (s, i) {
+        var off = i - pos;
+        var ao = Math.abs(off);
+        var sc = Math.max(0.6, 1 - ao * 0.17);
+        s.style.transform = 'translate(-50%,-50%) translateX(' + (off * spacing).toFixed(1) + 'px) translateZ(' + (-ao * size * 0.7).toFixed(1) + 'px) rotateY(' + (off * -40).toFixed(1) + 'deg) scale(' + sc.toFixed(3) + ')';
+        s.style.zIndex = String(100 - Math.round(ao * 10));
+        s.style.filter = 'brightness(' + Math.max(0.45, 1 - ao * 0.22).toFixed(2) + ')';
+        s.classList.toggle('on', ao < 0.5);
+      });
+    }
+    function frame(now) {
+      if (now - lastTouch > 5200 && now - lastAuto > 3400) {
+        var nxt = Math.round(target) + dir;
+        if (nxt >= n - 1) { nxt = n - 1; dir = -1; }
+        if (nxt <= 0) { nxt = 0; dir = 1; }
+        goTo(nxt);
+        lastAuto = now;
+      }
+      pos += (target - pos) * 0.085;
+      if (Math.abs(target - pos) < 0.001) pos = target;
+      render();
+      requestAnimationFrame(frame);
+    }
+    var drag = null;
+    track.addEventListener('pointerdown', function (e) {
+      drag = { x: e.clientX, start: target, moved: 0 };
+      root.classList.add('dragging');
+      poke();
+    });
+    window.addEventListener('pointermove', function (e) {
+      if (!drag) return;
+      var dx = e.clientX - drag.x;
+      drag.moved = Math.max(drag.moved, Math.abs(dx));
+      var size = slides[0].offsetWidth || 200;
+      target = Math.max(-0.35, Math.min(n - 0.65, drag.start - dx / (size * 0.62)));
+      caption();
+    });
+    window.addEventListener('pointerup', function () {
+      if (!drag) return;
+      root.classList.remove('dragging');
+      goTo(Math.round(target));
+      setTimeout(function () { drag = null; }, 0);
+      poke();
+    });
+    track.addEventListener('click', function (e) {
+      if (drag && drag.moved > 7) { e.preventDefault(); return; }
+      var a = e.target.closest('.cf-slide');
+      if (!a) return;
+      var i = slides.indexOf(a);
+      if (i !== Math.round(target)) { e.preventDefault(); goTo(i); poke(); }
+    });
+    var wheelLock = 0;
+    root.addEventListener('wheel', function (e) {
+      var now = performance.now();
+      if (now - wheelLock < 380) return;
+      var d = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+      if (Math.abs(d) < 4) return;
+      wheelLock = now;
+      goTo(Math.round(target) + (d > 0 ? 1 : -1));
+      poke();
+      e.preventDefault();
+    }, { passive: false });
+    root.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { goTo(Math.round(target) + 1); poke(); }
+      if (e.key === 'ArrowLeft') { goTo(Math.round(target) - 1); poke(); }
+    });
+    root.addEventListener('mouseenter', poke);
+    caption();
+    render();
+    requestAnimationFrame(frame);
+  })();
 })();
