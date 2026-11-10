@@ -1,7 +1,8 @@
-/* Sketch Dev Studio — Papercraft World (Three.js)
-   Dunia kertas: diorama potongan kertas yang berputar seperti karusel
-   mengikuti scroll; maskot kucing kertas meluncur dari cluster ke cluster.
-   Varian: 'scroll' (beranda) | 'parked' (halaman lain). */
+/* Sketch Dev Studio — Paper Plane Room (Three.js)
+   Di dalam ruangan kertas yang hangat: pesawat-pesawat kertas beterbangan
+   ke sana kemari mengikuti kursor pengunjung (atau berkelana sendiri saat
+   kursor diam), meninggalkan jejak garis putus-putus ala sketsa.
+   Varian: 'scroll' (beranda) | 'parked' (halaman lain, lebih tenang). */
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
@@ -27,6 +28,13 @@ let PAPER_TEX = null;
 function paperMat(color, rough = .94) {
   return new THREE.MeshStandardMaterial({
     color, roughness: rough, map: PAPER_TEX, bumpMap: PAPER_TEX, bumpScale: .012
+  });
+}
+function paperMatTiled(color, rx, ry, rough = .96) {
+  const tex = PAPER_TEX.clone();
+  tex.needsUpdate = true; tex.repeat.set(rx, ry);
+  return new THREE.MeshStandardMaterial({
+    color, roughness: rough, map: tex, bumpMap: tex, bumpScale: .012
   });
 }
 function glyphTexture(glyph, fg = '#4a3428') {
@@ -73,7 +81,6 @@ function blobShape(w, h, bumps = 5, seed = 1) {
   s.lineTo(w / 2, 0); s.lineTo(-w / 2, 0);
   return s;
 }
-function hillShape(w, h) { return blobShape(w, h, 4, 3); }
 function cloudShape(w = 1.9) {
   const s = new THREE.Shape();
   s.moveTo(-w / 2, 0);
@@ -108,78 +115,33 @@ function triShape(w, h) {
   s.moveTo(-w / 2, 0); s.lineTo(w / 2, 0); s.lineTo(0, h); s.closePath(); return s;
 }
 
-/* ---------- potongan siap pakai ---------- */
-function tree(h = 1.15, color = 0x5da271) {
-  const g = new THREE.Group();
-  const trunk = cut(rectShape(.13, h * .36, .03), 0x8a5a36); trunk.position.y = 0; g.add(trunk);
-  const top = cut(blobShape(h * .78, h * .72, 5, 2), color);
-  top.position.y = h * .3; g.add(top);
-  return g;
-}
-function flower(color = 0xef8354) {
-  const g = new THREE.Group();
-  const stem = new THREE.Mesh(new THREE.CylinderGeometry(.02, .02, .34, 6), paperMat(0x5da271));
-  stem.position.y = .17; g.add(stem);
-  const head = cut(circleShape(.09), color, .05); head.position.y = .4; g.add(head);
-  const core = cut(circleShape(.04), 0xffd23f, .06); core.position.set(0, .4, .03); g.add(core);
-  return g;
-}
-function house() {
-  const g = new THREE.Group();
-  const body = cut(rectShape(1.25, 1.0, .03), 0xfdf6e3); body.position.y = .5; g.add(body);
-  const roof = cut(triShape(1.6, .78), 0xe2725b); roof.position.y = 1.0; g.add(roof);
-  const chim = cut(rectShape(.2, .44, .02), 0xb8a88f); chim.position.set(.42, 1.28, -.02); g.add(chim);
-  const door = cut(rectShape(.3, .52, .1), 0x7fb5d5); door.position.set(-.22, .26, .1); g.add(door);
-  const win = cut(circleShape(.13), 0xffd23f); win.position.set(.3, .62, .1); g.add(win);
-  const sign = cut(rectShape(.62, .2, .06), 0xffc531); sign.position.set(0, 1.06, .12); g.add(sign);
-  return g;
-}
-function paperCat(scale = 1) {
-  const g = new THREE.Group();
-  const body = cut(blobShape(.62, .5, 4, 5), 0xfdf6e3); g.add(body);
-  const head = cut(circleShape(.27), 0xfdf6e3); head.position.set(0, .52, .03); g.add(head);
-  [[-.17, .72], [.17, .72]].forEach(([ex, ey]) => {
-    const ear = cut(triShape(.2, .24), 0xfdf6e3); ear.position.set(ex - .1, ey - .1, .01); g.add(ear);
-    const inner = cut(triShape(.1, .12), 0xf6b8c1); inner.position.set(ex - .05, ey - .04, .05); g.add(inner);
+/* ---------- pesawat kertas (dart lipatan klasik, hidung ke +Z) ---------- */
+function paperPlaneMesh(color) {
+  const A = [0, 0, .58], B = [-.58, .14, -.46], C = [.58, .14, -.46],
+        D = [0, .07, -.46], E = [0, -.24, -.38];
+  const tris = [
+    A, B, D,   // sayap kiri atas
+    A, D, C,   // sayap kanan atas
+    A, E, B,   // sisi bawah kiri
+    A, C, E,   // sisi bawah kanan
+    B, E, D,   // ekor kiri
+    C, D, E,   // ekor kanan
+  ];
+  const pos = new Float32Array(tris.flat());
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  geo.computeVertexNormals();
+  const mat = new THREE.MeshStandardMaterial({
+    color, roughness: .85, map: PAPER_TEX, flatShading: true, side: THREE.DoubleSide,
   });
-  [[-.11], [.11]].forEach(([ex]) => {
-    const eye = new THREE.Mesh(new THREE.CircleGeometry(.028, 12), new THREE.MeshBasicMaterial({ color: 0x38342b }));
-    eye.position.set(ex, .55, .21); g.add(eye);
-  });
-  const nose = cut(triShape(.07, .05), 0xef8354, .04); nose.rotation.z = Math.PI; nose.position.set(-.035, .44, .2); g.add(nose);
-  const tail = new THREE.Mesh(new THREE.TorusGeometry(.3, .055, 8, 20, 2.1), paperMat(0xf3e9d2));
-  tail.position.set(.36, .12, -.02); tail.rotation.set(0, .5, -.7); tail.scale.z = .5; g.add(tail);
-  const seat = cut(cloudShape(1.05), 0xffffff); seat.position.set(-.52, -.32, -.06); g.add(seat);
-  g.scale.setScalar(scale);
-  return g;
-}
-function paperSnake() {
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.castShadow = true;
+  const edges = new THREE.LineSegments(
+    new THREE.EdgesGeometry(geo, 12),
+    new THREE.LineBasicMaterial({ color: 0x4a3428, transparent: true, opacity: .32 }));
+  mesh.add(edges);
   const g = new THREE.Group();
-  const pts = [[-1.5, .12], [-.8, .34], [.05, .14], [.8, .38], [1.45, .18]];
-  pts.forEach(([px, py], i) => {
-    const d = cut(circleShape(.21 - Math.abs(i - 3) * .012), i === 4 ? 0x37b06c : 0x2f9e63, .1);
-    d.position.set(px, py, .02); g.add(d);
-  });
-  const headG = new THREE.Group(); headG.position.set(1.45, .18, .1);
-  [[-.08, .1], [.08, .1]].forEach(([ex, ey]) => {
-    const eye = new THREE.Mesh(new THREE.CircleGeometry(.032, 12), new THREE.MeshBasicMaterial({ color: 0xffffff }));
-    eye.position.set(ex, ey, .1); headG.add(eye);
-    const pupil = new THREE.Mesh(new THREE.CircleGeometry(.016, 10), new THREE.MeshBasicMaterial({ color: 0x22271f }));
-    pupil.position.set(ex, ey, .115); headG.add(pupil);
-    const leaf = cut(triShape(.09, .16), 0x57b25e, .05);
-    leaf.position.set(ex - .045, .16, 0); leaf.rotation.z = ex > 0 ? -.45 : .45; headG.add(leaf);
-  });
-  g.add(headG);
-  return g;
-}
-function cardMesh(faceTex, w = 1.0) {
-  const g = new THREE.Group();
-  const box = new THREE.Mesh(new RoundedBoxGeometry(w, w, .09, 3, .05), paperMat(0xfffdf4, .85));
-  box.castShadow = true; g.add(box);
-  const f = new THREE.Mesh(new THREE.PlaneGeometry(w * .92, w * .92),
-    new THREE.MeshStandardMaterial({ map: faceTex, roughness: .85, transparent: true }));
-  f.position.z = .048; g.add(f);
-  const b = f.clone(); b.position.z = -.048; b.rotation.y = Math.PI; g.add(b);
+  g.add(mesh);
   return g;
 }
 
@@ -189,7 +151,7 @@ export function initWorld(opts = {}) {
   const container = document.getElementById('scene');
   if (!container) return;
   init(container, variant).catch(err => {
-    console.warn('Paper world unavailable:', err);
+    console.warn('Paper plane room unavailable:', err);
     window.__sceneReady = 'failed';
   });
 }
@@ -201,7 +163,7 @@ async function init(container, variant) {
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   renderer.setSize(container.clientWidth, container.clientHeight);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.02;
+  renderer.toneMappingExposure = 1.04;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   container.appendChild(renderer.domElement);
@@ -209,222 +171,283 @@ async function init(container, variant) {
   const scene = new THREE.Scene();
   const pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), .04).texture;
-  scene.environmentIntensity = .55;
+  scene.environmentIntensity = .62;
 
   const camera = new THREE.PerspectiveCamera(42, container.clientWidth / container.clientHeight, .1, 100);
-  let camZ = 13.8, camY = 3.6, worldY = .1, worldScale = 1;
+  const bounds = { x: 8.4, yMin: -.6, yMax: 6.2, zMin: -3.2, zMax: 2.4 };
+  let camZ = 13.8, camY = 2.9;
   function frame() {
     const a = container.clientWidth / container.clientHeight;
     const portrait = a < .85;
-    camZ = portrait ? 19.5 : 13.8;
-    camY = portrait ? 4.6 : 3.6;
-    worldScale = portrait ? .74 : 1;
-    world.position.y = portrait ? 2.0 : .1;
+    camZ = portrait ? 20.5 : 13.8;
+    camY = portrait ? 3.4 : 2.9;
     camera.aspect = a; camera.updateProjectionMatrix();
     renderer.setSize(container.clientWidth, container.clientHeight);
+    const halfH = Math.tan(THREE.MathUtils.degToRad(21)) * camZ;
+    bounds.x = Math.max(2.8, halfH * a * .88);
+    bounds.yMax = 1.5 + halfH * .88;
+    bounds.yMin = Math.max(-1.5, 1.5 - halfH * .8);
   }
 
-  scene.add(new THREE.HemisphereLight(0xfff6e0, 0xd8c9a3, .95));
-  const sunLight = new THREE.DirectionalLight(0xfff1d6, 1.35);
-  sunLight.position.set(6, 11, 8); sunLight.castShadow = true;
+  scene.add(new THREE.HemisphereLight(0xfff6e0, 0xd8c9a3, .9));
+  const sunLight = new THREE.DirectionalLight(0xfff1d6, 1.25);
+  sunLight.position.set(-5, 9, 7); sunLight.castShadow = true;
   sunLight.shadow.mapSize.set(2048, 2048);
-  sunLight.shadow.camera.left = -13; sunLight.shadow.camera.right = 13;
-  sunLight.shadow.camera.top = 13; sunLight.shadow.camera.bottom = -13;
+  sunLight.shadow.camera.left = -14; sunLight.shadow.camera.right = 14;
+  sunLight.shadow.camera.top = 14; sunLight.shadow.camera.bottom = -14;
   sunLight.shadow.radius = 5; sunLight.shadow.bias = -.0004;
   scene.add(sunLight);
-  const fill = new THREE.DirectionalLight(0xbcd8ff, .35); fill.position.set(-7, 4, -5); scene.add(fill);
+  const fill = new THREE.DirectionalLight(0xbcd8ff, .3); fill.position.set(7, 4, 6); scene.add(fill);
 
-  /* matahari kertas (tetap di langit) */
-  const sun = new THREE.Group();
-  for (let i = 0; i < 8; i++) {
-    const ray = cut(triShape(.3, .62), 0xffc531, .08);
-    const holder = new THREE.Group(); holder.rotation.z = (i / 8) * Math.PI * 2;
-    ray.position.y = .78; holder.add(ray); sun.add(holder);
-  }
-  const sunCore = cut(circleShape(.52), 0xffd23f); sun.add(sunCore);
-  sun.position.set(-8.6, 5.6, -7); scene.add(sun);
+  /* ============ RUANGAN ============ */
+  const room = new THREE.Group(); scene.add(room);
+  const WALL_Z = -5.2, FLOOR_Y = -2.1;
 
-  const world = new THREE.Group(); scene.add(world);
-  const R = 8.6;
+  const wall = new THREE.Mesh(new THREE.PlaneGeometry(52, 24), paperMatTiled(0xf7ecd2, 7, 3));
+  wall.position.set(0, 5, WALL_Z); wall.receiveShadow = true; room.add(wall);
 
-  function shadowPlane(w = 7) {
-    const p = new THREE.Mesh(new THREE.PlaneGeometry(w, w * .42), new THREE.ShadowMaterial({ opacity: .16 }));
-    p.rotation.x = -Math.PI / 2; p.position.y = -1.62; p.receiveShadow = true; return p;
-  }
-  function cluster(angleDeg, build) {
-    const a = THREE.MathUtils.degToRad(angleDeg);
-    const g = new THREE.Group();
-    g.position.set(Math.sin(a) * R, 0, Math.cos(a) * R);
-    g.rotation.y = a;
-    g.add(shadowPlane());
-    build(g);
-    world.add(g);
-    return g;
-  }
-  function hill(w, h, color, y = -1.6) {
-    const m = cut(hillShape(w, h), color); m.position.y = y; return m;
-  }
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(52, 15), paperMatTiled(0xe6c48c, 8, 2));
+  floor.rotation.x = -Math.PI / 2; floor.position.set(0, FLOOR_Y, WALL_Z + 7.4);
+  floor.receiveShadow = true; room.add(floor);
 
-  /* --- tengah: bukit studio --- */
-  const center = new THREE.Group(); world.add(center);
-  center.add(shadowPlane(9));
-  const bigHill = hill(7.6, 3.1, 0x8fce7e, -1.6); center.add(bigHill);
-  const backHill = hill(9.5, 2.2, 0xa8dba8, -1.6); backHill.position.z = -1.4; center.add(backHill);
-  const studio = house(); studio.position.set(-.4, .95, .3); studio.scale.setScalar(1.25); center.add(studio);
-  const t1 = tree(1.5, 0x4e9a5f); t1.position.set(2.2, .55, .2); center.add(t1);
-  const t2 = tree(1.1, 0x7fb069); t2.position.set(-2.6, .35, .1); center.add(t2);
-  [[-1.8, -.2], [1.2, -.5], [2.9, -.1]].forEach(([fx, fy], i) => {
-    const f = flower([0xef8354, 0xf6b8c1, 0xffd23f][i]); f.position.set(fx, fy + .55, .55); center.add(f);
+  const baseboard = new THREE.Mesh(new THREE.BoxGeometry(52, .55, .16), paperMat(0xfffdf4));
+  baseboard.position.set(0, FLOOR_Y + .27, WALL_Z + .06); room.add(baseboard);
+
+  const rug = new THREE.Mesh(new THREE.CircleGeometry(3.1, 40), paperMat(0xe8927c, .98));
+  rug.rotation.x = -Math.PI / 2; rug.scale.set(1.25, .62, 1);
+  rug.position.set(.4, FLOOR_Y + .012, -.6); rug.receiveShadow = true; room.add(rug);
+
+  /* jendela (kiri) — langit kertas + matahari + awan + tirai */
+  const win = new THREE.Group(); win.position.set(-5.6, 3.1, WALL_Z + .12); room.add(win);
+  const winFrame = cut(rectShape(3.5, 4.3, .09), 0xfffdf4, .16); win.add(winFrame);
+  const sky = new THREE.Mesh(new THREE.PlaneGeometry(3.0, 3.8),
+    new THREE.MeshStandardMaterial({ color: 0xaedcf2, roughness: .95, map: PAPER_TEX }));
+  sky.position.z = .05; win.add(sky);
+  const winSun = cut(circleShape(.42), 0xffd23f, .06); winSun.position.set(-.85, 1.15, .1); win.add(winSun);
+  const winCloud = cut(cloudShape(1.15), 0xffffff, .06); winCloud.position.set(.35, .55, .1); win.add(winCloud);
+  const winCloud2 = cut(cloudShape(.8), 0xffffff, .06); winCloud2.position.set(-.95, -.5, .1); win.add(winCloud2);
+  [[0, 0, .1, 3.8], [0, 0, 3.0, .1]].forEach(([bx, by, bw, bh]) => {
+    const bar = new THREE.Mesh(new THREE.BoxGeometry(bw || .1, bh || .1, .07), paperMat(0xfffdf4));
+    bar.position.set(bx, by, .12); win.add(bar);
+  });
+  [-1, 1].forEach(side => {
+    const curtain = cut(blobShape(.85, 3.9, 4, side > 0 ? 7 : 3), 0xe2725b, .1);
+    curtain.position.set(side * 1.95, .1, .16); curtain.rotation.z = side * .05; win.add(curtain);
+  });
+  const sill = cut(rectShape(3.9, .2, .05), 0xfffdf4, .14); sill.position.set(0, -2.25, .06); win.add(sill);
+
+  /* rak buku (kanan) */
+  const shelf = new THREE.Group(); shelf.position.set(5.9, 3.3, WALL_Z + .12); room.add(shelf);
+  const board = cut(rectShape(3.9, .18, .04), 0x8a5a36, .3); board.position.y = -.6; shelf.add(board);
+  const bookCols = [0xe2725b, 0x2f9e63, 0xffc531, 0x7fb5d5, 0xf6b8c1];
+  bookCols.forEach((col, i) => {
+    const h = .95 + (i % 3) * .16;
+    const book = new THREE.Mesh(new RoundedBoxGeometry(.34, h, .42, 2, .03), paperMat(col, .9));
+    book.position.set(-1.55 + i * .44, -.51 + h / 2, .12);
+    if (i === 4) { book.rotation.z = .17; book.position.x += .08; book.position.y -= .03; }
+    book.castShadow = true; shelf.add(book);
+  });
+  const potS = new THREE.Mesh(new THREE.CylinderGeometry(.2, .15, .3, 10), paperMat(0xc7533f));
+  potS.position.set(1.55, -.36, .12); shelf.add(potS);
+  const leafS = cut(blobShape(.55, .5, 5, 4), 0x5da271, .07); leafS.position.set(1.28, -.05, .12); shelf.add(leafS);
+  const board2 = cut(rectShape(3.9, .18, .04), 0x8a5a36, .3); board2.position.y = -2.1; shelf.add(board2);
+  const envStack = cut(rectShape(.95, .7, .06), 0xfffdf4, .1); envStack.position.set(-1.2, -1.72, .1); envStack.rotation.z = -.06; shelf.add(envStack);
+  const clockFace = cut(circleShape(.42), 0xfffdf4, .09); clockFace.position.set(.9, -1.68, .1); shelf.add(clockFace);
+  const hand1 = new THREE.Mesh(new THREE.BoxGeometry(.05, .3, .03), new THREE.MeshBasicMaterial({ color: 0x38342b }));
+  hand1.position.set(.9, -1.6, .22); shelf.add(hand1);
+  const hand2 = hand1.clone(); hand2.rotation.z = -1.1; hand2.position.set(.97, -1.72, .22); shelf.add(hand2);
+
+  /* ubin huruf di dinding (kanan atas) */
+  [['L', 3.1, 6.3, '#2f9e63'], ['7', 4.45, 6.55, '#c7533f']].forEach(([glyph, fx, fy, fg]) => {
+    const fr = new THREE.Group(); fr.position.set(fx, fy, WALL_Z + .1); room.add(fr);
+    fr.add(cut(rectShape(1.05, 1.05, .18), 0xfffdf4, .12));
+    const inner = new THREE.Mesh(new THREE.PlaneGeometry(.92, .92),
+      new THREE.MeshStandardMaterial({ map: glyphTexture(glyph, fg), roughness: .9 }));
+    inner.position.z = .145; fr.add(inner);
   });
 
-  /* --- cluster 0: BERANDA (ular kertas + huruf jatuh) --- */
-  const fallers = [];
-  cluster(0, g => {
-    g.add(hill(6.8, 1.9, 0x7fb069, -1.6));
-    const sn = paperSnake(); sn.position.set(-.4, -.95, .7); sn.scale.setScalar(1.15); g.add(sn);
-    const tr = tree(1.3, 0x5da271); tr.position.set(-2.7, -.75, .1); g.add(tr);
-    ['L', 'R', '7'].forEach((ch, i) => {
-      const tile = cardMesh(glyphTexture(ch), .62);
-      tile.position.set(-1.5 + i * 1.5, 2.6, .6);
-      tile.userData = { ph: i * 2.1, x: tile.position.x };
-      g.add(tile); fallers.push(tile);
+  /* lampu gantung */
+  const lamp = new THREE.Group(); lamp.position.set(-1.7, 0, -2.2); room.add(lamp);
+  const cord = new THREE.Mesh(new THREE.CylinderGeometry(.022, .022, 3.4, 6),
+    new THREE.MeshBasicMaterial({ color: 0x4a3428 }));
+  cord.position.y = 8.3; lamp.add(cord);
+  const shade = new THREE.Mesh(new THREE.ConeGeometry(.95, .95, 26, 1, true),
+    new THREE.MeshStandardMaterial({ color: 0xffc531, roughness: .8, map: PAPER_TEX, side: THREE.DoubleSide }));
+  shade.position.y = 6.45; shade.castShadow = true; lamp.add(shade);
+  const bulb = new THREE.Mesh(new THREE.SphereGeometry(.17, 14, 12),
+    new THREE.MeshBasicMaterial({ color: 0xffe9a8 }));
+  bulb.position.y = 6.12; lamp.add(bulb);
+  const glow = new THREE.PointLight(0xffd9a0, 12, 13, 1.8); glow.position.y = 6.0; lamp.add(glow);
+
+  /* tanaman sudut (kiri bawah) */
+  const plant = new THREE.Group(); plant.position.set(8.5, FLOOR_Y, -3.0); room.add(plant);
+  const pot = new THREE.Mesh(new THREE.CylinderGeometry(.46, .34, .68, 12), paperMat(0xc7533f));
+  pot.position.y = .34; pot.castShadow = true; plant.add(pot);
+  [[-.3, .72, .35], [.05, .92, -.2], [.35, .68, .25]].forEach(([lx, ly, rz], i) => {
+    const leaf = cut(blobShape(.8, .95, 5, i + 2), i === 1 ? 0x4e9a5f : 0x5da271, .07);
+    leaf.position.set(lx, ly, 0); leaf.rotation.z = rz; plant.add(leaf);
+  });
+
+  /* bintang kecil di dinding */
+  [[-2.3, 6.6, .26, 0xffc531], [7.9, 5.6, .2, 0xef8354], [-8.3, 5.9, .18, 0xffd23f]].forEach(([sx, sy, sr, col]) => {
+    const st = cut(starShape(sr), col, .07); st.position.set(sx, sy, WALL_Z + .08); room.add(st);
+  });
+
+  /* ============ PESAWAT KERTAS ============ */
+  const calm = variant === 'parked' || matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const SPEED = calm ? .55 : 1;
+  const planeCols = [0xffffff, 0xffe9a8, 0xffd3dc, 0xcfe6ff, 0xd8f3dc];
+  const planes = [];
+  const N = 5;
+  for (let i = 0; i < N; i++) {
+    const mesh = paperPlaneMesh(planeCols[i % planeCols.length]);
+    mesh.scale.setScalar(1.05);
+    scene.add(mesh);
+    const trailGeo = new THREE.BufferGeometry();
+    trailGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(3 * 70), 3));
+    const trail = new THREE.Line(trailGeo, new THREE.LineDashedMaterial({
+      color: 0x8a6d4f, dashSize: .22, gapSize: .15, transparent: true, opacity: .45,
+    }));
+    trail.frustumCulled = false;
+    scene.add(trail);
+    const a = (i / N) * Math.PI * 2;
+    planes.push({
+      mesh, trail, pts: [],
+      pos: new THREE.Vector3(Math.cos(a) * 4.5, 2.6 + Math.sin(a * 2) * 1.2, Math.sin(a) * 1.4),
+      vel: new THREE.Vector3(-Math.sin(a), 0, Math.cos(a)).multiplyScalar(3),
+      speed: (3.1 + (i % 3) * .55) * SPEED,
+      turn: 2.4 + (i % 3) * .4,
+      orbitR: .8 + i * .35,
+      orbitSpd: (.55 + (i % 4) * .16) * (i % 2 ? -1 : 1),
+      phase: i * 1.7,
+      wp: new THREE.Vector3(),
+      wpAt: 0,
+      roll: 0,
     });
-    const st = cut(starShape(.24), 0xffc531); st.position.set(2.95, 2.4, .3); g.add(st);
-  });
-
-  /* --- cluster 1: GAME (6 kartu ikon berdiri) --- */
-  const loader = new THREE.TextureLoader();
-  const icons = ['letter-rain-icon.png', 'letter-snake-icon.png', 'numerik-crisis-icon.png',
-                 'number-rain-icon.png', 'number-snake-icon.png', 'meowdoku-icon.png'];
-  cluster(-70, g => {
-    g.add(hill(7.2, 1.8, 0xf2c4ce, -1.6));
-    icons.forEach((name, i) => {
-      const tex = loader.load('images/' + name);
-      tex.colorSpace = THREE.SRGBColorSpace;
-      const card = cardMesh(tex, 1.06);
-      const col = i % 3, row = Math.floor(i / 3);
-      card.position.set((col - 1) * 1.55, .15 - row * 1.28, .5 - row * .25);
-      card.rotation.z = (col - 1) * .05;
-      card.userData = { ph: i * .9, y: card.position.y };
-      g.add(card); fallers.push(card);
-    });
-    const tr = tree(1.2, 0xe58bb1); tr.position.set(-3.1, -.8, 0); g.add(tr);
-    const tr2 = tree(1.0, 0xe58bb1); tr2.position.set(3.1, -.85, 0); g.add(tr2);
-  });
-
-  /* --- cluster 2: TENTANG (pensil raksasa + buku + bintang) --- */
-  cluster(-140, g => {
-    g.add(hill(6.8, 1.8, 0xa8cbe0, -1.6));
-    const pencil = new THREE.Group();
-    const pBody = cut(rectShape(.52, 2.6, .06), 0xffc531); pBody.position.y = 1.3; pencil.add(pBody);
-    const pTip = cut(triShape(.52, .62), 0xf7ead1); pTip.position.y = 2.6; pTip.rotation.z = Math.PI; pencil.add(pTip);
-    const pLead = cut(triShape(.16, .24), 0x38342b); pLead.position.y = 2.78; pLead.rotation.z = Math.PI; pencil.add(pLead);
-    const pEraser = cut(rectShape(.52, .3, .05), 0xf6b8c1); pEraser.position.y = -.05; pencil.add(pEraser);
-    pencil.position.set(-1.9, -.9, .4); pencil.rotation.z = .38; g.add(pencil);
-    const book = new THREE.Group();
-    [-1, 1].forEach(side => {
-      const page = cut(rectShape(1.15, 1.5, .04), 0xfffdf4);
-      page.position.set(side * .55, .75, 0); page.rotation.y = side * -.32; book.add(page);
-      const cover = cut(rectShape(1.22, 1.58, .04), 0xe2725b);
-      cover.position.set(side * .56, .72, -.05); cover.rotation.y = side * -.32; book.add(cover);
-    });
-    book.position.set(1.1, -.95, .5); g.add(book);
-    [[-.2, 2.2], [1.9, 2.7], [2.9, 1.6]].forEach(([sx, sy], i) => {
-      const st = cut(starShape(.26), [0xffc531, 0xffd23f, 0xef8354][i]);
-      st.position.set(sx, sy, .3); st.userData = { ph: i * 1.7 };
-      g.add(st); fallers.push(st);
-    });
-  });
-
-  /* --- cluster 3: KONTAK (kotak pos + amplop + pesawat kertas) --- */
-  cluster(-210, g => {
-    g.add(hill(6.8, 1.8, 0xf6d9a8, -1.6));
-    const box = new THREE.Group();
-    const bBody = cut(rectShape(1.3, .8, .05), 0xe2725b); bBody.position.y = .4; box.add(bBody);
-    const bTop = cut(blobShape(1.3, .5, 3, 4), 0xe2725b); bTop.position.y = .78; box.add(bTop);
-    const bDoor = cut(rectShape(.9, .55, .1), 0xc7533f); bDoor.position.set(0, .38, .1); box.add(bDoor);
-    const bLeg = cut(rectShape(.16, .8, .03), 0x8a5a36); bLeg.position.y = -.4; box.add(bLeg);
-    const flag = cut(rectShape(.12, .5, .03), 0xffc531); flag.position.set(.72, .85, 0); flag.rotation.z = -.5; box.add(flag);
-    box.position.set(-1.3, -.55, .4); g.add(box);
-    const env = cardMesh(glyphTexture('✉', '#c7533f'), 1.0);
-    env.position.set(1.2, .5, .5); env.rotation.z = -.14; env.userData = { ph: .8, y: .5 };
-    g.add(env); fallers.push(env);
-    const plane = new THREE.Group();
-    const w1 = cut(triShape(1.1, .34), 0xfffdf4); w1.rotation.set(0, 0, 0); plane.add(w1);
-    const w2 = cut(triShape(.8, .26), 0xdfe9f5); w2.rotation.y = .7; w2.position.z = -.1; plane.add(w2);
-    plane.position.set(2.4, 1.9, .2); plane.rotation.z = -.3; plane.userData = { ph: 2.2, y: 1.9 };
-    g.add(plane); fallers.push(plane);
-    const heart = cut(starShape(.22), 0xef8354); heart.position.set(.2, 2.3, .3); g.add(heart);
-  });
-
-  /* awan melayang (ikut dunia) */
-  const clouds = [];
-  [[-4.5, 4.6, -3], [5, 5.2, -2], [0, 5.8, -6.5], [-6.5, 3.8, 2.5], [6.8, 4.2, 3]].forEach(([cx, cy, cz], i) => {
-    const cl = cut(cloudShape(1.7 + (i % 3) * .4), 0xffffff);
-    cl.position.set(cx, cy, cz); cl.userData = { ph: i * 1.3, x: cx };
-    world.add(cl); clouds.push(cl);
-  });
-
-  /* maskot kucing di atas awan kecil */
-  const cat = paperCat(1.05);
-  world.add(cat);
-
-  /* ---------- interaksi & animasi ---------- */
-  const ANGLES = [0, -70, -140, -210].map(THREE.MathUtils.degToRad);
-  const MAXROT = -ANGLES[ANGLES.length - 1];
-  let targetRot = variant === 'parked' ? .55 : 0;
-  let catAngle = .38, mx = 0, tx = 0;
-  addEventListener('pointermove', e => { tx = (e.clientX / innerWidth - .5) * 2; });
-  function updateScroll() {
-    if (variant !== 'scroll') return;
-    const max = document.documentElement.scrollHeight - innerHeight;
-    const p = max > 0 ? Math.min(scrollY / max, 1) : 0;
-    targetRot = p * MAXROT;
   }
-  addEventListener('scroll', updateScroll, { passive: true }); updateScroll();
+  window.__planes = planes;
 
+  /* ---------- kursor -> titik dunia ---------- */
+  const raycaster = new THREE.Raycaster();
+  const ndc = new THREE.Vector2();
+  const zPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+  const cursorPoint = new THREE.Vector3(0, 2.8, 0);
+  let cursorAt = -1e4, parX = 0, parY = 0;
+  addEventListener('pointermove', e => {
+    ndc.set((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
+    raycaster.setFromCamera(ndc, camera);
+    const hit = new THREE.Vector3();
+    if (raycaster.ray.intersectPlane(zPlane, hit)) {
+      hit.x = THREE.MathUtils.clamp(hit.x, -bounds.x, bounds.x);
+      hit.y = THREE.MathUtils.clamp(hit.y, bounds.yMin + .4, bounds.yMax);
+      hit.z = 0;
+      cursorPoint.copy(hit);
+      cursorAt = performance.now();
+    }
+    parX = (e.clientX / innerWidth - .5) * 2;
+    parY = (e.clientY / innerHeight - .5) * 2;
+  }, { passive: true });
+
+  const _aim = new THREE.Vector3(), _des = new THREE.Vector3(), _sep = new THREE.Vector3(), _away = new THREE.Vector3();
+  const _m4 = new THREE.Matrix4(), _q = new THREE.Quaternion(), _qr = new THREE.Quaternion();
+  const _up = new THREE.Vector3(0, 1, 0), _zero = new THREE.Vector3(), _axisZ = new THREE.Vector3(0, 0, 1);
+  const _prevDir = new THREE.Vector3();
+  function pickWaypoint(p, t) {
+    p.wp.set(
+      (Math.random() * 2 - 1) * bounds.x * .85,
+      bounds.yMin + .6 + Math.random() * (bounds.yMax - bounds.yMin - 1),
+      bounds.zMin + Math.random() * (bounds.zMax - bounds.zMin));
+    p.wpAt = t;
+  }
+  planes.forEach(p => pickWaypoint(p, 0));
+
+  function updatePlane(p, dt, t, now) {
+    if (now - cursorAt < 3600) {
+      const oa = t * p.orbitSpd + p.phase;
+      _aim.set(
+        cursorPoint.x + Math.cos(oa) * p.orbitR,
+        cursorPoint.y + Math.sin(oa * 1.3) * p.orbitR * .55,
+        cursorPoint.z + Math.sin(oa) * .8);
+    } else {
+      if (p.pos.distanceTo(p.wp) < 1.3 || t - p.wpAt > 9) pickWaypoint(p, t);
+      _aim.copy(p.wp);
+    }
+    _des.subVectors(_aim, p.pos);
+    const dist = _des.length();
+    _des.normalize().multiplyScalar(p.speed * (dist < 1 ? .55 + .45 * dist : 1));
+    /* separasi antar pesawat */
+    _sep.set(0, 0, 0);
+    for (const o of planes) {
+      if (o === p) continue;
+      const d = p.pos.distanceTo(o.pos);
+      if (d < 1.15 && d > 1e-4) {
+        _away.subVectors(p.pos, o.pos).normalize();
+        _sep.addScaledVector(_away, (1.15 - d) * 2.2);
+      }
+    }
+    _des.add(_sep);
+    /* dinding ruangan: dorong kembali dengan lembut */
+    if (p.pos.x > bounds.x) _des.x -= (p.pos.x - bounds.x) * 3;
+    if (p.pos.x < -bounds.x) _des.x -= (p.pos.x + bounds.x) * 3;
+    if (p.pos.y > bounds.yMax) _des.y -= (p.pos.y - bounds.yMax) * 3;
+    if (p.pos.y < bounds.yMin) _des.y -= (p.pos.y - bounds.yMin) * 3;
+    if (p.pos.z > bounds.zMax) _des.z -= (p.pos.z - bounds.zMax) * 3;
+    if (p.pos.z < bounds.zMin) _des.z -= (p.pos.z + bounds.zMin) * 3;
+
+    _prevDir.copy(p.vel).normalize();
+    p.vel.lerp(_des, 1 - Math.exp(-p.turn * dt));
+    p.vel.setLength(p.speed);
+    p.pos.addScaledVector(p.vel, dt);
+
+    const newDir = _des.copy(p.vel).normalize();
+    const turnY = (_prevDir.x * newDir.z - _prevDir.z * newDir.x);
+    const targetRoll = THREE.MathUtils.clamp(turnY * 5.5, -1.05, 1.05);
+    p.roll += (targetRoll - p.roll) * Math.min(1, dt * 7);
+    _m4.lookAt(_zero, newDir, _up);
+    _q.setFromRotationMatrix(_m4);
+    _qr.setFromAxisAngle(_axisZ, p.roll);
+    p.mesh.quaternion.copy(_q).multiply(_qr);
+    p.mesh.position.copy(p.pos);
+
+    /* jejak putus-putus */
+    const last = p.pts[p.pts.length - 1];
+    if (!last || last.distanceToSquared(p.pos) > .055) {
+      p.pts.push(p.pos.clone());
+      if (p.pts.length > 70) p.pts.shift();
+      const attr = p.trail.geometry.getAttribute('position');
+      p.pts.forEach((v, i) => attr.setXYZ(i, v.x, v.y, v.z));
+      for (let i = p.pts.length; i < 70; i++) {
+        const v = p.pts[p.pts.length - 1] || p.pos;
+        attr.setXYZ(i, v.x, v.y, v.z);
+      }
+      attr.needsUpdate = true;
+      p.trail.geometry.setDrawRange(0, Math.max(2, p.pts.length));
+      p.trail.computeLineDistances();
+    }
+  }
+
+  /* ---------- loop ---------- */
   let running = true;
   new IntersectionObserver(e => { running = e[0].isIntersecting; }).observe(container);
   document.addEventListener('visibilitychange', () => { running = !document.hidden; });
 
   frame();
-  camera.position.set(0, camY, camZ); // mulai sudah terbingkai — tanpa dolly dari titik nol
+  camera.position.set(0, camY, camZ);
   const clock = new THREE.Clock();
-  let readyFlag = false;
+  let readyFlag = false, smoothX = 0, smoothY = 0;
   function animate() {
     requestAnimationFrame(animate);
     if (!running) return;
-    const t = clock.getElapsedTime();
-    mx += (tx - mx) * .04;
-    world.rotation.y += (targetRot - world.rotation.y) * .055;
-    world.rotation.x = Math.sin(t * .3) * .012 + mx * .01;
-    world.scale.setScalar(worldScale);
-    sun.rotation.z = t * .05;
-    clouds.forEach(cl => {
-      cl.position.x = cl.userData.x + Math.sin(t * .14 + cl.userData.ph) * .5;
-      cl.position.y += Math.sin(t * .5 + cl.userData.ph) * .0009;
-    });
-    fallers.forEach(f => {
-      if (f.userData.x !== undefined) {           // huruf jatuh cluster beranda
-        const fall = ((t * .34 + f.userData.ph) % 3.4);
-        f.position.y = 2.7 - fall;
-        f.rotation.z = Math.sin(t * 1.4 + f.userData.ph) * .16;
-        f.rotation.y = Math.sin(t * .9 + f.userData.ph) * .3;
-      } else {                                     // elemen melayang lembut
-        f.position.y = f.userData.y + Math.sin(t * .8 + f.userData.ph) * .13;
-        f.rotation.y = Math.sin(t * .6 + f.userData.ph) * .1;
-      }
-    });
-    /* kucing meluncur mengikuti putaran dunia */
-    const active = variant === 'parked' ? .38 : (-world.rotation.y) + .38;
-    catAngle += (active - catAngle) * .06;
-    cat.position.set(Math.sin(catAngle) * R, .62 + Math.sin(t * 1.3) * .07, Math.cos(catAngle) * R);
-    cat.rotation.y = catAngle;
-    cat.rotation.z = Math.sin(t * 1.3) * .03;
-    camera.position.x += ((mx * .8) - camera.position.x) * .04;
-    camera.position.y += (camY - camera.position.y) * .05;
-    camera.position.z += (camZ - camera.position.z) * .06;
-    camera.lookAt(0, .9, 0);
+    const dt = Math.min(clock.getDelta(), .1);
+    const t = clock.elapsedTime;
+    const now = performance.now();
+    for (const p of planes) updatePlane(p, dt, t, now);
+    smoothX += (parX - smoothX) * .03;
+    smoothY += (parY - smoothY) * .03;
+    camera.position.x = smoothX * .85;
+    camera.position.y = camY - smoothY * .45;
+    camera.position.z = camZ;
+    camera.lookAt(0, 1.6, 0);
     renderer.render(scene, camera);
     if (!readyFlag) { readyFlag = true; window.__sceneReady = true; }
   }
