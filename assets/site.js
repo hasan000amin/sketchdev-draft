@@ -1,4 +1,4 @@
-/* Sketch Dev Studio — shared site behaviour: starfield, marquee, language, reveal. */
+/* Sketch Dev Studio · shared site behaviour: starfield, marquee, language, reveal. */
 (function () {
   /* ---------- Starfield (night sky, 3 lapisan kedalaman) ---------- */
   var sky = document.getElementById('stars');
@@ -106,12 +106,12 @@
 
   /* ---------- Language (EN default; saved choice in localStorage 'studio-lang') ---------- */
   var MANI = {
-    en: 'We believe a game does not need <span class="hl">explosions</span> to be unforgettable. Ours begin on <span class="un">paper</span> — one pencil sketch at a time — and grow into worlds you can finish, master, and replay. <span class="hl">Small games, drawn slowly, played everywhere.</span>',
-    id: 'Kami percaya game tidak butuh <span class="hl">ledakan</span> untuk tak terlupakan. Game kami berawal di atas <span class="un">kertas</span> — satu sketsa pensil demi satu — lalu tumbuh jadi dunia yang bisa kamu tamatkan, kuasai, dan mainkan lagi. <span class="hl">Game kecil, digambar perlahan, dimainkan di mana saja.</span>'
+    en: 'We believe a game does not need <span class="hl">explosions</span> to be unforgettable. Ours begin on <span class="un">paper</span>, one pencil sketch at a time, and grow into worlds you can finish, master, and replay. <span class="hl">Small games, drawn slowly, played everywhere.</span>',
+    id: 'Kami percaya game tidak butuh <span class="hl">ledakan</span> untuk tak terlupakan. Game kami berawal di atas <span class="un">kertas</span>, satu sketsa pensil demi satu, lalu tumbuh jadi dunia yang bisa kamu tamatkan, kuasai, dan mainkan lagi. <span class="hl">Game kecil, digambar perlahan, dimainkan di mana saja.</span>'
   };
   var HERO_H1 = {
-    en: 'Hand-drawn <span class="amber">games</span>,<br>drawn slowly —<br>played <span class="terra">everywhere</span>.',
-    id: 'Game <span class="amber">gambar tangan</span>,<br>digambar perlahan —<br>dimainkan <span class="terra">di mana saja</span>.'
+    en: 'Hand-drawn <span class="amber">games</span>,<br>drawn slowly,<br>played <span class="terra">everywhere</span>.',
+    id: 'Game <span class="amber">gambar tangan</span>,<br>digambar perlahan,<br>dimainkan <span class="terra">di mana saja</span>.'
   };
   var lang = localStorage.getItem('studio-lang') || 'en';
 
