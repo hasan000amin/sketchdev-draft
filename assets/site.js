@@ -198,7 +198,10 @@
     var p = location.pathname, key = '';
     if (p.indexOf('/about') === 0) key = 'about';
     else if (p.indexOf('/contact') === 0) key = 'contact';
-    else if (p === '/' || p === '/index.html') key = location.hash === '#games' ? 'games' : 'home';
+    else if (p.indexOf('/games') === 0) key = 'games';
+    else if (p.indexOf('/privacy') === 0) key = 'privacy';
+    else if (p.indexOf('/terms') === 0) key = 'terms';
+    else if (p === '/' || p === '/index.html') key = 'home';
     bnav.querySelectorAll('.tab[data-key]').forEach(function (a) {
       a.classList.toggle('active', a.getAttribute('data-key') === key);
     });
