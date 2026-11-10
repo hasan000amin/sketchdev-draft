@@ -172,10 +172,18 @@ export function initWorld({ variant = 'home' } = {}) {
     iconGroup.visible = true;
     const cy = (0.5 - (rect.top + rect.height / 2) / window.innerHeight) * viewH;
     const span = Math.min(viewW * 0.86, 16.4);
+    const n = iconMeshes.length;
+    const step = n > 1 ? span / (n - 1) : 0;
+    /* Skala ikon mengikuti lebar layar: di layar sempit ikon mengecil
+       mengikuti jarak antar ikon agar tidak saling tumpang tindih. */
+    const fit = n > 1 ? Math.min(1, (step * 0.94) / 2.78) : 1;
+    const narrow = camera.aspect < 0.85;
     iconMeshes.forEach((g, i) => {
-      const t = iconMeshes.length === 1 ? 0.5 : i / (iconMeshes.length - 1);
+      const t = n === 1 ? 0.5 : i / (n - 1);
+      g.scale.setScalar(fit);
       g.userData.baseX = -span / 2 + span * t;
-      g.userData.baseY = cy + Math.sin(t * Math.PI) * 0.55 - 0.28;
+      g.userData.baseY = cy + Math.sin(t * Math.PI) * 0.55 * fit - 0.28 +
+        (narrow ? (i % 2 === 0 ? 0.55 : -0.55) * fit * 1.9 : 0);
       g.userData.baseZ = -0.6 - Math.abs(t - 0.5) * 1.6;
     });
     iconGroup.position.y = 0;
