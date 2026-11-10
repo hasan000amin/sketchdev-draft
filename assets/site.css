@@ -375,6 +375,7 @@ nav .links a.active{color:var(--gold);opacity:1}
 .doc ul,.doc ol{margin:0 0 15px 22px}
 .doc li{margin-bottom:6px}
 .doc a{color:#c74a36;text-decoration:underline;text-underline-offset:3px;font-weight:700}
+.doc a.btn{color:var(--ink);text-decoration:none}
 .doc strong{color:var(--ink)}
 .doc table{width:100%;border-collapse:collapse;margin:16px 0 22px;font-size:14px}
 .doc th,.doc td{border:1.5px solid rgba(44,42,62,.18);padding:9px 11px;text-align:left;color:#454055;line-height:1.55}

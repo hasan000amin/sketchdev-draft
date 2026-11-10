@@ -160,7 +160,7 @@
 
   function applyLang(l) {
     lang = l;
-    window.currentLang = l; /* dipakai sendMail() halaman kontak */
+    window.currentLang = l;
     document.documentElement.lang = l === 'id' ? 'id' : 'en';
     /* Attribute-driven texts (hero, nav, footer, subheroes) */
     document.querySelectorAll('[data-en]').forEach(function (el) {
@@ -207,26 +207,6 @@
     });
   }
   bindReveals();
-
-  /* ---------- Form kontak (global; dipakai halaman /contact) ---------- */
-  window.sendMail = function (e) {
-    e.preventDefault();
-    var isID = window.currentLang === 'id';
-    function val(idEn, idId) {
-      var el = document.getElementById(isID ? idId : idEn);
-      return el ? el.value : '';
-    }
-    var name = val('name-en', 'name-id');
-    var topic = val('topic-en', 'topic-id');
-    var message = val('message-en', 'message-id');
-    var subject = encodeURIComponent('[' + topic + '] - ' + name);
-    var body = encodeURIComponent(
-      (isID ? 'Nama: ' : 'Name: ') + name + '\n' +
-      (isID ? 'Topik: ' : 'Topic: ') + topic + '\n\n' +
-      (isID ? 'Pesan:' : 'Message:') + '\n' + message
-    );
-    window.location.href = 'mailto:support@sketchdev.my.id?subject=' + subject + '&body=' + body;
-  };
 
   /* ---------- Router SPA (URL bersih, transisi tanpa reload) ---------- */
   var app = document.getElementById('app');
