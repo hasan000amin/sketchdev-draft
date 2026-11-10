@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Andika:ital,wght@0,400;0,700;1,400&family=Baloo+2:wght@600;700;800&family=Caveat:wght@600;700&family=Fredoka:wght@500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css?v=10">
+<link rel="stylesheet" href="/assets/site.css?v=11">
 <script type="importmap">
 { "imports": { "three": "/vendor/three.module.min.js" } }
 </script>
@@ -67,12 +67,12 @@
   <div class="stage3d">
     <div class="coverflow" id="coverflow" tabindex="0" aria-label="Game showcase">
       <div class="cf-track" id="cfTrack">
-      <a class="cf-slide" href="https://play.google.com/store/apps/details?id=id.my.sketchdev.letterrain" target="_blank" rel="noopener" data-name="Letter Rain" data-sub-en="Live on Google Play" data-sub-id="Sudah tayang di Google Play"><img src="/images/letter-rain-icon.png" alt="Letter Rain"></a>
-      <a class="cf-slide" href="/games" data-name="Letter Snake" data-sub-en="Closed testing" data-sub-id="Pengujian tertutup"><img src="/images/letter-snake-icon.png" alt="Letter Snake"></a>
-      <a class="cf-slide" href="/games" data-name="Numerik Crisis" data-sub-en="Closed testing" data-sub-id="Pengujian tertutup"><img src="/images/numerik-crisis-icon.png" alt="Numerik Crisis"></a>
-      <a class="cf-slide" href="/games" data-name="Number Rain" data-sub-en="Closed testing" data-sub-id="Pengujian tertutup"><img src="/images/number-rain-icon.png" alt="Number Rain"></a>
-      <a class="cf-slide" href="/games" data-name="Number Snake" data-sub-en="Closed testing" data-sub-id="Pengujian tertutup"><img src="/images/number-snake-icon.png" alt="Number Snake"></a>
-      <a class="cf-slide" href="/games" data-name="Meowdoku" data-sub-en="Closed testing" data-sub-id="Pengujian tertutup"><img src="/images/meowdoku-icon.png" alt="Meowdoku"></a>
+      <a class="cf-slide" href="https://play.google.com/store/apps/details?id=id.my.sketchdev.letterrain" target="_blank" rel="noopener" data-name="Letter Rain" data-sub-en="Live on Google Play" data-sub-id="Sudah tayang di Google Play" data-desc-en="Catch falling letters to answer quizzes. 100 levels in 2 languages (Indonesian &amp; English)." data-desc-id="Tangkap huruf yang jatuh untuk menjawab kuis. 100 level dalam 2 bahasa (Indonesia &amp; Inggris)." data-play="https://play.google.com/store/apps/details?id=id.my.sketchdev.letterrain"><img src="/images/letter-rain-icon.png" alt="Letter Rain"></a>
+      <a class="cf-slide" href="/games" data-name="Letter Snake" data-sub-en="Closed testing" data-sub-id="Pengujian tertutup" data-desc-en="Guide the snake to eat letters and spell the quiz answers. 100 levels in 2 languages (Indonesian &amp; English)." data-desc-id="Arahkan ular memakan huruf untuk mengeja jawaban kuis. 100 level dalam 2 bahasa (Indonesia &amp; Inggris)."><img src="/images/letter-snake-icon.png" alt="Letter Snake"></a>
+      <a class="cf-slide" href="/games" data-name="Numerik Crisis" data-sub-en="Closed testing" data-sub-id="Pengujian tertutup" data-desc-en="Trigger chain reactions of numbers before time runs out. A fast math puzzle with 100 levels in 2 languages (Indonesian &amp; English)." data-desc-id="Picu reaksi berantai angka sebelum waktu habis. Puzzle matematika cepat dengan 100 level dalam 2 bahasa (Indonesia &amp; Inggris)."><img src="/images/numerik-crisis-icon.png" alt="Numerik Crisis"></a>
+      <a class="cf-slide" href="/games" data-name="Number Rain" data-sub-en="Closed testing" data-sub-id="Pengujian tertutup" data-desc-en="Catch falling numbers and pair them with the operator to hit every target. 100 levels in 2 languages (Indonesian &amp; English)." data-desc-id="Tangkap angka yang jatuh dan pasangkan dengan operator untuk mencapai semua target. 100 level dalam 2 bahasa (Indonesia &amp; Inggris)."><img src="/images/number-rain-icon.png" alt="Number Rain"></a>
+      <a class="cf-slide" href="/games" data-name="Number Snake" data-sub-en="Closed testing" data-sub-id="Pengujian tertutup" data-desc-en="Guide Kenxia the snake to munch numbers and reach every math target. 100 levels in 2 languages (Indonesian &amp; English)." data-desc-id="Arahkan Kenxia si ular memakan angka untuk mencapai target hitungan. 100 level dalam 2 bahasa (Indonesia &amp; Inggris)."><img src="/images/number-snake-icon.png" alt="Number Snake"></a>
+      <a class="cf-slide" href="/games" data-name="Meowdoku" data-sub-en="Closed testing" data-sub-id="Pengujian tertutup" data-desc-en="A cozy cat logic puzzle: place one cat in every row, column, and color region. 100 levels in 2 languages (Indonesian &amp; English)." data-desc-id="Teka-teki logika kucing yang nyaman: tempatkan satu kucing di setiap baris, kolom, dan wilayah warna. 100 level dalam 2 bahasa (Indonesia &amp; Inggris)."><img src="/images/meowdoku-icon.png" alt="Meowdoku"></a>
       </div>
       <div class="cf-ui">
         <div class="cf-name" id="cfName">Letter Rain</div>
@@ -82,9 +82,23 @@
     </div>
     <div class="stage-cap">
       <span class="stage-kick" data-en="Our games" data-id="Game kami">Our games</span>
-      <span class="stage-hint" data-en="Drag or swipe to browse the shelf" data-id="Seret atau geser untuk melihat koleksinya">Drag or swipe to browse the shelf</span>
+      <span class="stage-hint" data-en="Drag or swipe, tap a cover for details" data-id="Seret atau geser, ketuk sampul untuk detail">Drag or swipe, tap a cover for details</span>
     </div>
   </div>
+  <div class="gdetail" id="gdetail" aria-hidden="true">
+  <div class="gd-backdrop" id="gdBackdrop"></div>
+  <div class="gd-card" role="dialog" aria-modal="true" aria-labelledby="gdName">
+    <button type="button" class="gd-close" id="gdClose" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+    <div class="gd-media"><img id="gdImg" src="" alt=""></div>
+    <div class="gd-info">
+      <span class="gd-badge gd-rise" id="gdBadge"></span>
+      <h3 class="gd-rise" id="gdName"></h3>
+      <p class="gd-desc gd-rise" id="gdDesc"></p>
+      <div class="gd-meta gd-rise" id="gdMeta"></div>
+      <div class="gd-actions gd-rise" id="gdActions"></div>
+    </div>
+  </div>
+</div>
   <div class="panel hero-card">
     <div class="tape"></div>
     <div class="hero-kicker"><b>●</b>&nbsp; <span data-en="Indie mobile games" data-id="Game mobile indie">Indie mobile games</span></div>
@@ -183,7 +197,7 @@
     <span class="lang-pills"><button type="button" class="lpill" data-l="en">EN</button><button type="button" class="lpill" data-l="id">ID</button></span>
   </div>
 </div>
-<script src="/assets/site.js?v=8"></script>
+<script src="/assets/site.js?v=9"></script>
 <script type="module">
 import { initWorld } from '/assets/world.js?v=6';
 const w = initWorld({ variant: 'home' });

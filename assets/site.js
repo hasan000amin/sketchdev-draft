@@ -183,6 +183,7 @@
     if (btn) btn.textContent = l === 'en' ? 'ID' : 'EN';
     localStorage.setItem('studio-lang', l);
     if (window.__cfCaption) window.__cfCaption();
+    if (window.__gdRefresh) window.__gdRefresh();
   }
 
   var btn = document.getElementById('langBtn');
@@ -283,6 +284,10 @@
       bindReveals();
       markActive();
       markTabs();
+      document.body.classList.remove('gd-open');
+      document.body.style.overflow = '';
+      if (window.__gdReset) window.__gdReset();
+      if (window.__initCoverflow) window.__initCoverflow();
       if (window.__closeSheet) window.__closeSheet();
       if (window.__worldSetVariant) {
         window.__worldSetVariant(location.pathname === '/' ? 'home' : 'parked');
@@ -345,9 +350,10 @@
   }
 
   /* ---------- Coverflow hero (album geser) ---------- */
-  (function () {
+  function initCoverflow() {
     var root = document.getElementById('coverflow');
-    if (!root) return;
+    if (!root || root.__cfInit) return;
+    root.__cfInit = true;
     var track = document.getElementById('cfTrack');
     var slides = Array.prototype.slice.call(track.querySelectorAll('.cf-slide'));
     var nameEl = document.getElementById('cfName');
@@ -389,6 +395,7 @@
       });
     }
     function frame(now) {
+      if (!document.contains(root)) return;
       if (now - lastTouch > 5200 && now - lastAuto > 3400) {
         var nxt = Math.round(target) + dir;
         if (nxt >= n - 1) { nxt = n - 1; dir = -1; }
@@ -428,6 +435,7 @@
       if (!a) return;
       var i = slides.indexOf(a);
       if (i !== Math.round(target)) { e.preventDefault(); goTo(i); poke(); }
+      else { e.preventDefault(); openDetail(a); }
     });
     var wheelLock = 0;
     root.addEventListener('wheel', function (e) {
@@ -443,10 +451,119 @@
     root.addEventListener('keydown', function (e) {
       if (e.key === 'ArrowRight') { goTo(Math.round(target) + 1); poke(); }
       if (e.key === 'ArrowLeft') { goTo(Math.round(target) - 1); poke(); }
+      if (e.key === 'Enter') { openDetail(slides[Math.round(target)]); }
     });
     root.addEventListener('mouseenter', poke);
+
+    /* ---------- Detail game (panel mewah) ---------- */
+    var gdAll = document.querySelectorAll('.gdetail');
+    var gd = null;
+    gdAll.forEach(function (el) { if (!gd && el.closest('#app')) gd = el; });
+    if (!gd) gd = gdAll[0] || null;
+    gdAll.forEach(function (el) { if (el !== gd) el.remove(); });
+    if (gd && gd.parentElement !== document.body) document.body.appendChild(gd);
+    var gdImg = document.getElementById('gdImg');
+    var gdBadge = document.getElementById('gdBadge');
+    var gdName = document.getElementById('gdName');
+    var gdDesc = document.getElementById('gdDesc');
+    var gdMeta = document.getElementById('gdMeta');
+    var gdActions = document.getElementById('gdActions');
+    var gdCurrent = null;
+    var gdTimer = null;
+    var TXT = {
+      play: { en: 'Get it on Google Play', id: 'Dapatkan di Google Play' },
+      tester: { en: 'Become a playtester', id: 'Jadi playtester' },
+      games: { en: 'See it on the Games page', id: 'Lihat di halaman Games' },
+      levels: { en: '100 levels', id: '100 level' }
+    };
+    function fillDetail(slide) {
+      var l = curLang();
+      var play = slide.getAttribute('data-play');
+      gdImg.src = slide.querySelector('img').getAttribute('src');
+      gdImg.alt = slide.getAttribute('data-name');
+      gdName.textContent = slide.getAttribute('data-name');
+      gdDesc.textContent = slide.getAttribute(l === 'id' ? 'data-desc-id' : 'data-desc-en');
+      gdBadge.textContent = slide.getAttribute(l === 'id' ? 'data-sub-id' : 'data-sub-en');
+      gdBadge.className = 'gd-badge gd-rise' + (play ? ' live' : ' test');
+      gdMeta.innerHTML = '';
+      [TXT.levels[l], 'EN × ID', 'Android'].forEach(function (t) {
+        var chip = document.createElement('span');
+        chip.className = 'gd-chip';
+        chip.textContent = t;
+        gdMeta.appendChild(chip);
+      });
+      gdActions.innerHTML = '';
+      var primary = document.createElement('a');
+      primary.className = 'btn';
+      if (play) {
+        primary.href = play;
+        primary.target = '_blank';
+        primary.rel = 'noopener';
+        primary.textContent = '▶ ' + TXT.play[l];
+      } else {
+        primary.href = 'https://gametester.my.id';
+        primary.target = '_blank';
+        primary.rel = 'noopener';
+        primary.textContent = TXT.tester[l];
+      }
+      var secondary = document.createElement('a');
+      secondary.className = 'btn ghost';
+      secondary.href = '/games';
+      secondary.textContent = TXT.games[l];
+      gdActions.appendChild(primary);
+      gdActions.appendChild(secondary);
+    }
+    function openDetail(slide) {
+      if (!gd || !slide) return;
+      gdCurrent = slide;
+      fillDetail(slide);
+      clearTimeout(gdTimer);
+      gd.classList.remove('bye');
+      gd.classList.add('show');
+      gd.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('gd-open');
+      document.body.style.overflow = 'hidden';
+      poke();
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { gd.classList.add('in'); });
+      });
+    }
+    function closeDetail() {
+      if (!gd || !gd.classList.contains('show')) return;
+      gd.classList.remove('in');
+      gd.classList.add('bye');
+      document.body.classList.remove('gd-open');
+      document.body.style.overflow = '';
+      gdTimer = setTimeout(function () {
+        gd.classList.remove('show', 'bye');
+        gd.setAttribute('aria-hidden', 'true');
+        gdCurrent = null;
+      }, 420);
+    }
+    window.__gdReset = function () {
+      if (!gd) return;
+      clearTimeout(gdTimer);
+      gd.classList.remove('show', 'in', 'bye');
+      gd.setAttribute('aria-hidden', 'true');
+      gdCurrent = null;
+      document.body.classList.remove('gd-open');
+      document.body.style.overflow = '';
+    };
+    window.__gdRefresh = function () {
+      if (gdCurrent && gd && gd.classList.contains('show')) fillDetail(gdCurrent);
+    };
+    if (gd) {
+      document.getElementById('gdBackdrop').addEventListener('click', closeDetail);
+      document.getElementById('gdClose').addEventListener('click', closeDetail);
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeDetail();
+      });
+    }
+
     caption();
     render();
     requestAnimationFrame(frame);
-  })();
+  }
+  window.__initCoverflow = initCoverflow;
+  initCoverflow();
 })();
