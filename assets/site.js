@@ -199,22 +199,49 @@
     if (p.indexOf('/about') === 0) key = 'about';
     else if (p.indexOf('/contact') === 0) key = 'contact';
     else if (p.indexOf('/games') === 0) key = 'games';
-    else if (p.indexOf('/privacy') === 0) key = 'privacy';
-    else if (p.indexOf('/terms') === 0) key = 'terms';
+    else if (p.indexOf('/privacy') === 0 || p.indexOf('/terms') === 0) key = 'menu';
     else if (p === '/' || p === '/index.html') key = 'home';
     bnav.querySelectorAll('.tab[data-key]').forEach(function (a) {
       a.classList.toggle('active', a.getAttribute('data-key') === key);
     });
   }
   if (bnav) {
-    var tabLangBtn = document.getElementById('tabLang');
-    if (tabLangBtn) {
-      tabLangBtn.addEventListener('click', function () {
-        applyLang(lang === 'en' ? 'id' : 'en');
-      });
-    }
     markTabs();
     window.addEventListener('hashchange', markTabs);
+    var sheet = document.getElementById('moreSheet');
+    var backdrop = document.getElementById('sheetBackdrop');
+    var menuBtn = document.getElementById('menuBtn');
+    function markLangPills() {
+      if (!sheet) return;
+      sheet.querySelectorAll('.lpill').forEach(function (b) {
+        b.classList.toggle('on', b.getAttribute('data-l') === lang);
+      });
+    }
+    function setSheet(open) {
+      if (!sheet) return;
+      sheet.classList.toggle('open', open);
+      sheet.setAttribute('aria-hidden', open ? 'false' : 'true');
+      if (backdrop) backdrop.classList.toggle('open', open);
+      if (open) markLangPills();
+    }
+    window.__closeSheet = function () { setSheet(false); };
+    if (menuBtn) {
+      menuBtn.addEventListener('click', function () {
+        setSheet(!sheet.classList.contains('open'));
+      });
+    }
+    if (backdrop) backdrop.addEventListener('click', function () { setSheet(false); });
+    if (sheet) {
+      sheet.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () { setSheet(false); });
+      });
+      sheet.querySelectorAll('.lpill').forEach(function (b) {
+        b.addEventListener('click', function () {
+          applyLang(b.getAttribute('data-l'));
+          markLangPills();
+        });
+      });
+    }
   }
 
   applyLang(lang);
@@ -255,6 +282,7 @@
       bindReveals();
       markActive();
       markTabs();
+      if (window.__closeSheet) window.__closeSheet();
       if (window.__worldSetVariant) {
         window.__worldSetVariant(location.pathname === '/' ? 'home' : 'parked');
       }

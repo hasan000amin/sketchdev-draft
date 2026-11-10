@@ -407,13 +407,34 @@ nav .links a.active{color:var(--gold);opacity:1}
 
 /* ---------- Navigasi bawah mobile (gaya aplikasi native) ---------- */
 .bottom-nav{display:none}
+.sheet,.sheet-backdrop{display:none}
 @media(max-width:760px){
-  nav.bottom-nav{display:flex;position:fixed;top:auto;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:65;gap:2px;padding:6px;background:rgba(22,28,54,.92);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid rgba(230,189,102,.35);border-radius:20px;box-shadow:0 16px 36px rgba(0,0,0,.5);align-items:stretch;justify-content:flex-start}
-  .bottom-nav .tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 0;border:none;background:none;border-radius:14px;color:#a7b1d8;text-decoration:none;font:700 9px 'Andika',sans-serif;letter-spacing:0;cursor:pointer;white-space:nowrap}
-  .bottom-nav .tab svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  nav.bottom-nav{display:flex;position:fixed;top:auto;left:0;right:0;bottom:0;z-index:65;gap:0;padding:6px 4px calc(6px + env(safe-area-inset-bottom));background:rgba(15,19,38,.98);border:none;border-top:1px solid rgba(248,240,221,.14);border-radius:0;box-shadow:0 -10px 26px rgba(0,0,0,.35);align-items:stretch;justify-content:flex-start}
+  .bottom-nav .tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 0;border:none;background:none;border-radius:14px;color:#a7b1d8;text-decoration:none;font:700 10.5px 'Andika',sans-serif;letter-spacing:.02em;cursor:pointer;white-space:nowrap;border-radius:999px;margin:2px}
+  .bottom-nav .tab svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
   .bottom-nav .tab.active{color:#f2cd7e;background:rgba(230,189,102,.14)}
+  nav{justify-content:center}
+  nav .logo{font-size:15.5px}
   nav .links{display:none}
   #langBtn{display:none}
+  .subhero-card{text-align:center}
+  .subhero-card .sub{margin-left:auto;margin-right:auto}
+  .sec-head{text-align:center}
+  .sec-head::before{left:50%;margin-left:-59px}
+  .sec-head::after{left:50%;margin-left:66px}
+  .sec-head p{margin-left:auto;margin-right:auto}
+  .tester{text-align:center}
+  .tester p{margin-left:auto;margin-right:auto}
+  .bottom-nav .tab span{display:none}
+  .sheet-backdrop{display:block;position:fixed;inset:0;z-index:66;background:rgba(8,10,24,.55);opacity:0;pointer-events:none;transition:opacity .25s}
+  .sheet-backdrop.open{opacity:1;pointer-events:auto}
+  .sheet{display:block;position:fixed;left:10px;right:10px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:67;background:rgba(22,28,54,.97);border:1px solid rgba(230,189,102,.35);border-radius:20px;padding:8px;box-shadow:0 18px 40px rgba(0,0,0,.5);opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .25s,transform .25s}
+  .sheet.open{opacity:1;transform:none;pointer-events:auto}
+  .sheet-row{display:flex;align-items:center;gap:12px;padding:13px 12px;border-radius:14px;color:var(--cream);text-decoration:none;font:700 14px 'Andika',sans-serif}
+  .sheet-row svg{width:22px;height:22px;fill:none;stroke:#e9c979;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+  .lang-pills{margin-left:auto;display:flex;gap:6px}
+  .lpill{border:1px solid rgba(230,189,102,.5);background:none;color:#a7b1d8;border-radius:999px;padding:6px 14px;font:700 12px 'Andika',sans-serif;cursor:pointer}
+  .lpill.on{background:#e6bd66;color:#2a2438;border-color:#e6bd66}
   body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
   .tilt-l,.tilt-r{--tilt:0deg}
   .spot .art{margin-left:auto;margin-right:auto}
