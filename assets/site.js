@@ -94,12 +94,15 @@
   }
 
   /* ---------- Marquee (home) ---------- */
-  var mq = document.getElementById('mqTrack');
-  if (mq) {
-    var words = ['Hand-Drawn Games', '100 Levels', 'English × Indonesia', 'Sketch Dev Studio', 'Made in Jakarta'];
-    var half = words.map(function (w) { return w + '<i>•</i>'; }).join('');
-    mq.innerHTML = half + half;
+  function fillMarquee() {
+    var mq = document.getElementById('mqTrack');
+    if (mq) {
+      var words = ['Hand-Drawn Games', '100 Levels', 'English × Indonesia', 'Sketch Dev Studio', 'Made in Jakarta'];
+      var half = words.map(function (w) { return w + '<i>•</i>'; }).join('');
+      mq.innerHTML = half + half;
+    }
   }
+  fillMarquee();
 
   /* ---------- Language (EN default; saved choice in localStorage 'studio-lang') ---------- */
   var MANI = {
@@ -147,14 +150,114 @@
   applyLang(lang);
 
   /* ---------- Scroll reveal ---------- */
+  var io = null;
   if ('IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function (entries) {
+    io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); }
       });
     }, { threshold: .12 });
-    document.querySelectorAll('.rv').forEach(function (el) { io.observe(el); });
-  } else {
-    document.querySelectorAll('.rv').forEach(function (el) { el.classList.add('on'); });
+  }
+  function bindReveals() {
+    document.querySelectorAll('.rv:not(.on)').forEach(function (el) {
+      if (io) io.observe(el); else el.classList.add('on');
+    });
+  }
+  bindReveals();
+
+  /* ---------- Form kontak (global; dipakai halaman /contact) ---------- */
+  window.sendMail = function (e) {
+    e.preventDefault();
+    var isID = window.currentLang === 'id';
+    function val(idEn, idId) {
+      var el = document.getElementById(isID ? idId : idEn);
+      return el ? el.value : '';
+    }
+    var name = val('name-en', 'name-id');
+    var topic = val('topic-en', 'topic-id');
+    var message = val('message-en', 'message-id');
+    var subject = encodeURIComponent('[' + topic + '] - ' + name);
+    var body = encodeURIComponent(
+      (isID ? 'Nama: ' : 'Name: ') + name + '\n' +
+      (isID ? 'Topik: ' : 'Topic: ') + topic + '\n\n' +
+      (isID ? 'Pesan:' : 'Message:') + '\n' + message
+    );
+    window.location.href = 'mailto:support@sketchdev.my.id?subject=' + subject + '&body=' + body;
+  };
+
+  /* ---------- Router SPA (URL bersih, transisi tanpa reload) ---------- */
+  var app = document.getElementById('app');
+  if (app && window.history && window.fetch) {
+    var cache = {};
+    cache[location.pathname] = { html: app.innerHTML, title: document.title };
+    var navigating = false;
+
+    function markActive() {
+      document.querySelectorAll('nav .links a').forEach(function (a) {
+        var u = new URL(a.href, location.href);
+        a.classList.toggle('active', u.pathname === location.pathname && !u.hash);
+      });
+    }
+
+    function afterSwap(hash) {
+      applyLang(lang);
+      fillMarquee();
+      bindReveals();
+      markActive();
+      if (hash) {
+        var target = document.querySelector(hash);
+        if (target) { target.scrollIntoView(); return; }
+      }
+      window.scrollTo(0, 0);
+    }
+
+    function navigate(path, hash, push) {
+      if (navigating) return;
+      navigating = true;
+      app.classList.add('page-out');
+      var swap = function (page) {
+        setTimeout(function () {
+          app.innerHTML = page.html;
+          document.title = page.title;
+          if (push) history.pushState(null, '', path + (hash || ''));
+          app.classList.remove('page-out');
+          navigating = false;
+          afterSwap(hash);
+        }, 240);
+      };
+      if (cache[path]) { swap(cache[path]); return; }
+      fetch(path, { credentials: 'same-origin' })
+        .then(function (r) { return r.text(); })
+        .then(function (text) {
+          var doc = new DOMParser().parseFromString(text, 'text/html');
+          var newApp = doc.getElementById('app');
+          if (!newApp) throw new Error('no app');
+          cache[path] = { html: newApp.innerHTML, title: doc.title };
+          swap(cache[path]);
+        })
+        .catch(function () { location.href = path + (hash || ''); });
+    }
+
+    document.addEventListener('click', function (e) {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      var a = e.target.closest ? e.target.closest('a') : null;
+      if (!a || a.target === '_blank') return;
+      var href = a.getAttribute('href');
+      if (!href) return;
+      var u = new URL(a.href, location.href);
+      if (u.origin !== location.origin) return;
+      if (u.pathname === location.pathname) {
+        if (!u.hash) { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+        return; /* jangkar di halaman yang sama: perilaku bawaan */
+      }
+      e.preventDefault();
+      navigate(u.pathname, u.hash, true);
+    });
+
+    window.addEventListener('popstate', function () {
+      navigate(location.pathname, location.hash, false);
+    });
+
+    markActive();
   }
 })();

@@ -252,6 +252,11 @@ footer{padding:34px 30px 46px}
 .foot-base{margin-top:16px;padding-top:16px;border-top:1.5px solid rgba(248,240,221,.14);
   display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:13px;color:rgba(248,240,221,.6)}
 
+/* ---------- ROUTER SPA ---------- */
+#app{transition:opacity .24s ease, transform .24s ease}
+#app.page-out{opacity:0;transform:translateY(10px)}
+nav .links a.active{color:var(--gold);opacity:1}
+
 /* ---------- REVEAL ---------- */
 .rv{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
 .rv.on{opacity:1;transform:none}
