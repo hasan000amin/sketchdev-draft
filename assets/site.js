@@ -191,36 +191,10 @@
     });
   }
 
-  /* ---------- Navigasi bawah mobile (gaya aplikasi native) ---------- */
-  var TAB_ICONS = {
-    home: '<svg viewBox="0 0 24 24"><path d="M3 9.5 12 3l9 6.5"/><path d="M5 10v10h14V10"/><path d="M9.5 20v-6h5v6"/></svg>',
-    games: '<svg viewBox="0 0 24 24"><rect x="2.5" y="7" width="19" height="11" rx="5.5"/><path d="M7.5 10.8v3.4M5.8 12.5h3.4"/><circle cx="15.8" cy="11.6" r=".7" fill="currentColor" stroke="none"/><circle cx="17.9" cy="13.9" r=".7" fill="currentColor" stroke="none"/></svg>',
-    about: '<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c1.2-3.4 3.8-5 7-5s5.8 1.6 7 5"/></svg>',
-    contact: '<svg viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="m3.5 7.2 8.5 6 8.5-6"/></svg>',
-    lang: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17"/><path d="M12 3.5c2.4 2.3 3.6 5.2 3.6 8.5s-1.2 6.2-3.6 8.5c-2.4-2.3-3.6-5.2-3.6-8.5S9.6 5.8 12 3.5Z"/></svg>'
-  };
-  var TABS = [
-    { key: 'home', href: '/', icon: 'home', en: 'Home', id: 'Beranda' },
-    { key: 'games', href: '/#games', icon: 'games', en: 'Games', id: 'Game' },
-    { key: 'about', href: '/about', icon: 'about', en: 'About', id: 'Tentang' },
-    { key: 'contact', href: '/contact', icon: 'contact', en: 'Contact', id: 'Kontak' }
-  ];
-  var bnav = document.createElement('nav');
-  bnav.className = 'bottom-nav';
-  bnav.setAttribute('aria-label', 'Mobile');
-  var bhtml = '';
-  TABS.forEach(function (t) {
-    bhtml += '<a class="tab" data-key="' + t.key + '" href="' + t.href + '">' + TAB_ICONS[t.icon] +
-      '<span data-en="' + t.en + '" data-id="' + t.id + '">' + t.en + '</span></a>';
-  });
-  bhtml += '<button type="button" class="tab" id="tabLang">' + TAB_ICONS.lang +
-    '<span data-en="ID" data-id="EN">ID</span></button>';
-  bnav.innerHTML = bhtml;
-  document.body.appendChild(bnav);
-  document.getElementById('tabLang').addEventListener('click', function () {
-    applyLang(lang === 'en' ? 'id' : 'en');
-  });
+  /* ---------- Navigasi bawah mobile (markup statis di HTML) ---------- */
+  var bnav = document.querySelector('.bottom-nav');
   function markTabs() {
+    if (!bnav) return;
     var p = location.pathname, key = '';
     if (p.indexOf('/about') === 0) key = 'about';
     else if (p.indexOf('/contact') === 0) key = 'contact';
@@ -229,8 +203,16 @@
       a.classList.toggle('active', a.getAttribute('data-key') === key);
     });
   }
-  markTabs();
-  window.addEventListener('hashchange', markTabs);
+  if (bnav) {
+    var tabLangBtn = document.getElementById('tabLang');
+    if (tabLangBtn) {
+      tabLangBtn.addEventListener('click', function () {
+        applyLang(lang === 'en' ? 'id' : 'en');
+      });
+    }
+    markTabs();
+    window.addEventListener('hashchange', markTabs);
+  }
 
   applyLang(lang);
 
