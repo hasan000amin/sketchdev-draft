@@ -28,6 +28,15 @@ a{color:inherit}
 /* ---------- LANGIT (bintang, bulan, awan, komet) ---------- */
 #stars{position:fixed;inset:0;z-index:0;pointer-events:none}
 #stars .star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--d,3.4s) ease-in-out infinite}
+.stars-layer{position:absolute;inset:-48px;will-change:transform}
+#glow{position:fixed;left:0;top:0;width:380px;height:380px;margin:-190px 0 0 -190px;border-radius:50%;
+  pointer-events:none;z-index:0;opacity:0;transition:opacity .6s ease;mix-blend-mode:screen;
+  background:radial-gradient(circle, rgba(255,232,170,.17) 0%, rgba(255,232,170,.05) 42%, rgba(255,232,170,0) 68%)}
+#sparkles{position:fixed;inset:0;z-index:0;pointer-events:none}
+.sparkle{position:absolute;color:#ffe9a8;pointer-events:none;line-height:1;
+  text-shadow:0 0 9px rgba(255,220,150,.95);animation:sparkfly var(--life,900ms) ease-out forwards}
+@keyframes sparkfly{0%{transform:translate(-50%,-50%) scale(.35) rotate(0deg);opacity:0}
+  18%{opacity:1}100%{transform:translate(calc(-50% + var(--dx,0px)), calc(-50% + var(--dy,16px))) scale(1.05) rotate(85deg);opacity:0}}
 @keyframes twinkle{0%,100%{opacity:.14}50%{opacity:.95}}
 .moon{position:fixed;top:-64px;right:-40px;width:250px;height:250px;border-radius:50%;z-index:0;pointer-events:none;
   background:radial-gradient(circle at 42% 38%, #fff6d8 0%, #ffe9a8 45%, #f7d789 100%);
