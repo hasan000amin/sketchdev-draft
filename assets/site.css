@@ -415,4 +415,9 @@ nav .links a.active{color:var(--gold);opacity:1}
   nav .links{display:none}
   #langBtn{display:none}
   body{padding-bottom:calc(84px + env(safe-area-inset-bottom))}
+  .tilt-l,.tilt-r{--tilt:0deg}
+  .spot .art{margin-left:auto;margin-right:auto}
+  .spot{text-align:center}
+  .spot p{margin-left:auto;margin-right:auto}
+  .spot .row{justify-content:center}
 }
